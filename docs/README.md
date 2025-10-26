@@ -20,9 +20,11 @@ sample-api/
 ├── src/
 │   └── math_operations.py           # 🧠 Business Logic (Pure Functions)
 ├── tests/
-│   ├── test_math_operations.py      # ✅ Unit Tests (30 tests)
-│   ├── test_api_integration.py      # 🔗 API Integration Tests (31 tests)
-│   └── test_cli_integration.py      # 💻 CLI Integration Tests (27 tests)
+│   ├── unit/
+│   │   └── test_math_operations.py  # ✅ Unit Tests (30 tests)
+│   └── integration/
+│       ├── test_api_integration.py  # 🔗 API Integration Tests (31 tests)
+│       └── test_cli_integration.py  # 💻 CLI Integration Tests (27 tests)
 ├── app.py                           # 🚀 FastAPI REST API
 ├── cli.py                           # 💻 Command Line Interface
 ├── pyproject.toml                   # 📦 Dependencies & Configuration
@@ -71,9 +73,9 @@ The API will be available at:
 uv run python -m unittest discover -s tests -p "test_*.py" -v
 
 # Run specific test modules
-uv run python -m unittest tests.test_math_operations -v
-uv run python -m unittest tests.test_api_integration -v
-uv run python -m unittest tests.test_cli_integration -v
+uv run python -m unittest tests.unit.test_math_operations -v
+uv run python -m unittest tests.integration.test_api_integration -v
+uv run python -m unittest tests.integration.test_cli_integration -v
 
 # Run tests without verbose output
 uv run python -m unittest discover -s tests -p "test_*.py"
@@ -370,9 +372,9 @@ uv add --dev httpx black isort mypy
 uv run python -m unittest discover -s tests -p "test_*.py" -v
 
 # Run specific test categories
-uv run python -m unittest tests.test_math_operations -v      # Unit tests
-uv run python -m unittest tests.test_api_integration -v      # API tests  
-uv run python -m unittest tests.test_cli_integration -v      # CLI tests
+uv run python -m unittest tests.unit.test_math_operations -v           # Unit tests
+uv run python -m unittest tests.integration.test_api_integration -v    # API tests  
+uv run python -m unittest tests.integration.test_cli_integration -v    # CLI tests
 
 # Format code
 uv run black src/ tests/ app.py cli.py
@@ -384,9 +386,9 @@ uv run isort src/ tests/ app.py cli.py
 uv run mypy src/
 
 # Test individual files directly
-uv run python tests/test_math_operations.py
-uv run python tests/test_api_integration.py
-uv run python tests/test_cli_integration.py
+uv run python tests/unit/test_math_operations.py
+uv run python tests/integration/test_api_integration.py
+uv run python tests/integration/test_cli_integration.py
 ```
 
 ## 📝 Notes for Blog Post

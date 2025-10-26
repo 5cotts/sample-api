@@ -15,7 +15,7 @@ import sys
 import unittest
 
 # Get the path to the CLI script
-CLI_PATH = os.path.join(os.path.dirname(__file__), "..", "cli.py")
+CLI_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "cli.py")
 
 
 class TestCLICommands(unittest.TestCase):
