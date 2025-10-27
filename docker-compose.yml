@@ -1,0 +1,53 @@
+services:
+  # Backend API service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: sample-api-backend
+    ports:
+      - "8000:8000"
+    environment:
+      # FastAPI configuration
+      - PYTHONUNBUFFERED=1
+      - PYTHONPATH=/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+    networks:
+      - sample-api-network
+
+  # Frontend web service
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: sample-api-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+    networks:
+      - sample-api-network
+
+# Create a custom network for service communication
+networks:
+  sample-api-network:
+    driver: bridge
+
+# Optional: Add volumes for development
+volumes:
+  backend-data:
+  frontend-data:

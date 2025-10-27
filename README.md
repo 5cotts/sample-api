@@ -202,7 +202,59 @@ uv run python cli.py fibonacci 10
 
 uv run python cli.py is_prime 17
 
-uv run python cli.py stats "1,2,3,4,5"### Using Docker (Coming Soon)### Running the API
+uv run python cli.py stats "1,2,3,4,5"```
+
+### Using Docker 🐳
+
+#### Production Setup (Recommended)
+
+```bash
+# Build and run both services
+docker-compose up --build
+
+# Run in background
+docker-compose up -d --build
+
+# View logs
+docker-compose logs -f
+
+# Stop services
+docker-compose down
+```
+
+Services will be available at:
+- **Frontend**: `http://localhost:3000`
+- **Backend API**: `http://localhost:8000`
+- **API Docs**: `http://localhost:8000/docs`
+
+#### Development Setup with Docker
+
+```bash
+# Run development environment with hot reloading
+docker-compose -f docker-compose.dev.yml up --build
+
+# Run specific service
+docker-compose -f docker-compose.dev.yml up backend
+docker-compose -f docker-compose.dev.yml up frontend-dev
+```
+
+#### Docker Commands
+
+```bash
+# Rebuild containers
+docker-compose build --no-cache
+
+# View running containers
+docker-compose ps
+
+# Execute commands in running container
+docker-compose exec backend uv run python -m pytest
+docker-compose exec frontend-dev npm test
+
+# Clean up
+docker-compose down -v --remove-orphans
+docker system prune -a
+```### Running the API
 
 ```
 
