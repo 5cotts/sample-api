@@ -17,6 +17,7 @@ FastAPI features demonstrated:
 from typing import List, Union
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
@@ -36,6 +37,20 @@ app = FastAPI(
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
+)
+
+# Add CORS middleware to allow frontend requests
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000",  # React development server
+        "http://localhost:5173",  # Vite development server (alternative port)
+        "http://127.0.0.1:3000",  # Alternative localhost format
+        "http://127.0.0.1:5173",  # Alternative localhost format
+    ],
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["*"],
 )
 
 

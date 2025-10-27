@@ -1,270 +1,536 @@
-# Sample API Project - Full Stack# Sample API Project
+# Sample API Project - Full Stack# Sample API Project - Full Stack# Sample API Project
 
 
 
-An educational Python REST API project with frontend interface demonstrating key API design concepts for junior engineers.An educational Python REST API project demonstrating key API design concepts for junior engineers.
+An educational Python REST API project with React frontend demonstrating key API design concepts for junior engineers.
 
 
 
-## 🏗️ Project Structure## 🎯 Learning Objectives
+## 🎯 Learning ObjectivesAn educational Python REST API project with frontend interface demonstrating key API design concepts for junior engineers.An educational Python REST API project demonstrating key API design concepts for junior engineers.
 
 
 
-```This project demonstrates several important software engineering concepts:
+This project demonstrates several important software engineering concepts:
+
+
+
+1. **Separation of Concerns**: Business logic is completely separated from API implementation## 🏗️ Project Structure## 🎯 Learning Objectives
+
+2. **Multiple Interfaces**: Same business logic accessible via REST API, CLI, and web UI
+
+3. **Full Stack Architecture**: Backend API with React frontend client
+
+4. **Comprehensive Testing**: 88+ tests across unit, integration, and frontend layers
+
+5. **API Design**: RESTful endpoints with proper HTTP methods and status codes```This project demonstrates several important software engineering concepts:
+
+6. **Modern Frameworks**: FastAPI backend with React frontend
 
 sample-api/
 
+## 🏗️ Project Structure
+
 ├── backend/                    # FastAPI REST API1. **Separation of Concerns**: Business logic is completely separated from API implementation
 
-│   ├── src/                    # Business logic2. **Multiple Interfaces**: Same business logic accessible via REST API and CLI
-
-│   ├── tests/                  # Comprehensive test suite3. **Comprehensive Testing**: 88 tests across unit, API integration, and CLI integration layers
-
-│   ├── app.py                  # FastAPI application4. **Testing Framework**: Uses Python's built-in unittest framework (no external dependencies)
-
-│   ├── cli.py                  # Command-line interface5. **API Design**: RESTful endpoints with proper HTTP methods and status codes
-
-│   └── pyproject.toml          # Python dependencies6. **Modern API Framework**: FastAPI provides automatic documentation, data validation, and type safety
-
-├── frontend/                   # Web interface (coming soon)
-
-└── docker-compose.yml          # Local development setup (coming soon)## 📁 Project Structure
-
 ```
 
-```
+sample-api/│   ├── src/                    # Business logic2. **Multiple Interfaces**: Same business logic accessible via REST API and CLI
 
-## 🎯 Learning Objectivessample-api/
+├── backend/                         # FastAPI REST API
 
-├── src/
+│   ├── src/│   ├── tests/                  # Comprehensive test suite3. **Comprehensive Testing**: 88 tests across unit, API integration, and CLI integration layers
 
-This project demonstrates several important software engineering concepts:│   └── math_operations.py           # 🧠 Business Logic (Pure Functions)
+│   │   └── math_operations.py       # 🧠 Business Logic (Pure Functions)
 
-├── tests/
+│   ├── tests/│   ├── app.py                  # FastAPI application4. **Testing Framework**: Uses Python's built-in unittest framework (no external dependencies)
 
-1. **Separation of Concerns**: Business logic separated from API and frontend│   ├── test_math_operations.py      # ✅ Unit Tests (30 tests)
+│   │   ├── unit/
 
-2. **Multiple Interfaces**: Same business logic accessible via REST API, CLI, and web UI│   ├── test_api_integration.py      # 🔗 API Integration Tests (31 tests)
+│   │   │   └── test_math_operations.py    # ✅ Unit Tests (30 tests)│   ├── cli.py                  # Command-line interface5. **API Design**: RESTful endpoints with proper HTTP methods and status codes
 
-3. **Full Stack Architecture**: Backend API with frontend client│   └── test_cli_integration.py      # 💻 CLI Integration Tests (27 tests)
+│   │   └── integration/
 
-4. **Containerization**: Docker setup for local development├── app.py                           # 🚀 FastAPI REST API
+│   │       ├── test_api_integration.py    # 🔗 API Integration Tests (31 tests)│   └── pyproject.toml          # Python dependencies6. **Modern API Framework**: FastAPI provides automatic documentation, data validation, and type safety
 
-5. **Comprehensive Testing**: 88+ tests across unit, integration, and frontend layers├── cli.py                           # 💻 Command Line Interface
+│   │       └── test_cli_integration.py    # 💻 CLI Integration Tests (27 tests)
 
-├── pyproject.toml                   # 📦 Dependencies & Configuration
+│   ├── app.py                       # 🚀 FastAPI REST API├── frontend/                   # Web interface (coming soon)
+
+│   ├── cli.py                       # 💻 Command Line Interface
+
+│   └── pyproject.toml               # 📦 Python Dependencies & Configuration└── docker-compose.yml          # Local development setup (coming soon)## 📁 Project Structure
+
+├── frontend/                        # React Web Interface
+
+│   ├── src/```
+
+│   │   ├── components/              # React Components
+
+│   │   │   ├── SquareCalculator.jsx```
+
+│   │   │   ├── PowerCalculator.jsx
+
+│   │   │   ├── FactorialCalculator.jsx## 🎯 Learning Objectivessample-api/
+
+│   │   │   ├── FibonacciGenerator.jsx
+
+│   │   │   ├── PrimeChecker.jsx├── src/
+
+│   │   │   └── StatisticsCalculator.jsx
+
+│   │   ├── services/This project demonstrates several important software engineering concepts:│   └── math_operations.py           # 🧠 Business Logic (Pure Functions)
+
+│   │   │   └── api.js               # API client with error handling
+
+│   │   ├── App.jsx                  # Main React application├── tests/
+
+│   │   └── main.jsx                 # React entry point
+
+│   ├── public/                      # Static assets1. **Separation of Concerns**: Business logic separated from API and frontend│   ├── test_math_operations.py      # ✅ Unit Tests (30 tests)
+
+│   ├── package.json                 # Node.js dependencies
+
+│   └── vite.config.js               # Vite build configuration2. **Multiple Interfaces**: Same business logic accessible via REST API, CLI, and web UI│   ├── test_api_integration.py      # 🔗 API Integration Tests (31 tests)
+
+└── docs/                            # Additional documentation
+
+```3. **Full Stack Architecture**: Backend API with frontend client│   └── test_cli_integration.py      # 💻 CLI Integration Tests (27 tests)
+
+
+
+## 🚀 Quick Start4. **Containerization**: Docker setup for local development├── app.py                           # 🚀 FastAPI REST API
+
+
+
+### Prerequisites5. **Comprehensive Testing**: 88+ tests across unit, integration, and frontend layers├── cli.py                           # 💻 Command Line Interface
+
+
+
+- **Backend**: Python 3.11+ and [uv](https://docs.astral.sh/uv/) package manager├── pyproject.toml                   # 📦 Dependencies & Configuration
+
+- **Frontend**: Node.js 18+ and npm
 
 ## 🚀 Quick Start└── README.md                        # 📖 Documentation
 
+### Backend Setup
+
 ```
 
-### Backend API
+```bash
+
+# Navigate to backend directory### Backend API
+
+cd backend
 
 ## 🚀 Quick Start
 
-```bash
-
-# Navigate to backend### Prerequisites
-
-cd backend- Python 3.11+ 
-
-- [uv](https://docs.astral.sh/uv/) package manager
-
 # Install dependencies
+
+uv sync --dev```bash
+
+
+
+# Run the API# Navigate to backend### Prerequisites
+
+uv run python app.py
+
+```cd backend- Python 3.11+ 
+
+
+
+The API will be available at:- [uv](https://docs.astral.sh/uv/) package manager
+
+- **API endpoints**: `http://localhost:8000`
+
+- **Interactive docs**: `http://localhost:8000/docs`# Install dependencies
+
+- **OpenAPI schema**: `http://localhost:8000/openapi.json`
 
 uv sync --dev### Installation
 
+### Frontend Setup
 
 
-# Run the API```bash
+
+```bash
+
+# Navigate to frontend directory# Run the API```bash
+
+cd frontend
 
 uv run python app.py# Clone or download the project
 
-```cd sample-api
+# Install dependencies
+
+npm install```cd sample-api
 
 
 
-The API will be available at:# Install dependencies with uv
+# Start development server
 
-- **API endpoints**: `http://localhost:8000`uv add fastapi uvicorn requests
+npm run dev
 
-- **Interactive docs**: `http://localhost:8000/docs`uv add --dev httpx  # For FastAPI TestClient
-
-
-
-### Frontend (Coming Soon)# Or install from pyproject.toml
-
-uv sync --dev
-
-The frontend will provide a web interface to interact with the mathematical operations API.```
+```The API will be available at:# Install dependencies with uv
 
 
 
-### Using Docker (Coming Soon)### Running the API
+The frontend will be available at `http://localhost:5173`- **API endpoints**: `http://localhost:8000`uv add fastapi uvicorn requests
 
 
 
-```bash```bash
-
-# Run both frontend and backend# Start the FastAPI development server
-
-docker-compose up --builduv run python app.py
-
-```
-
-# Alternative: Use uvicorn directly
-
-## 📚 API Endpointsuv run uvicorn app:app --reload --host 0.0.0.0 --port 8000
-
-```
-
-### GET Endpoints
-
-- `GET /` - API informationThe API will be available at:
-
-- `GET /health` - Health check- **API endpoints**: `http://localhost:8000`
-
-- `GET /square/{number}` - Calculate square- **Interactive docs (Swagger UI)**: `http://localhost:8000/docs`
-
-- `GET /factorial/{number}` - Calculate factorial- **Alternative docs (ReDoc)**: `http://localhost:8000/redoc`
-
-- `GET /fibonacci/{count}` - Generate Fibonacci sequence
-
-- `GET /prime/{number}` - Check if prime### Running Tests
+### CLI Usage- **Interactive docs**: `http://localhost:8000/docs`uv add --dev httpx  # For FastAPI TestClient
 
 
 
-### POST Endpoints```bash
+```bash
 
-- `POST /power` - Calculate base^exponent# Run all tests (unit + integration)
+# Navigate to backend directory
 
-- `POST /stats` - Calculate statisticsuv run python -m unittest discover -s tests -p "test_*.py" -v
-
-
-
-## 🧪 Running Tests# Run specific test modules
-
-uv run python -m unittest tests.test_math_operations -v
-
-```bashuv run python -m unittest tests.test_api_integration -v
-
-cd backenduv run python -m unittest tests.test_cli_integration -v
+cd backend### Frontend (Coming Soon)# Or install from pyproject.toml
 
 
 
-# Run all tests# Run tests without verbose output
-
-uv run python -m unittest discover -s tests -p "test_*.py" -vuv run python -m unittest discover -s tests -p "test_*.py"
-
-```
-
-# Run specific test categories
-
-uv run python -m unittest tests.unit.test_math_operations -v     # Unit tests### Using the CLI
-
-uv run python -m unittest tests.integration.test_api_integration -v  # API tests
-
-uv run python -m unittest tests.integration.test_cli_integration -v  # CLI tests```bash
-
-```# Test business logic directly via command line
+# Use the command-line interfaceuv sync --dev
 
 uv run python cli.py square 5
 
-## 🛠️ Developmentuv run python cli.py power 2 8
+uv run python cli.py power 2 8The frontend will provide a web interface to interact with the mathematical operations API.```
 
 uv run python cli.py factorial 5
 
-### Code Qualityuv run python cli.py fibonacci 10
+uv run python cli.py fibonacci 10
 
-uv run python cli.py prime 17
+uv run python cli.py is_prime 17
+
+uv run python cli.py stats "1,2,3,4,5"### Using Docker (Coming Soon)### Running the API
+
+```
+
+
+
+## 🧪 Testing
+
+```bash```bash
+
+### Backend Tests
+
+# Run both frontend and backend# Start the FastAPI development server
+
+```bash
+
+cd backenddocker-compose up --builduv run python app.py
+
+
+
+# Run all tests```
+
+uv run python -m pytest tests/ -v
+
+# Alternative: Use uvicorn directly
+
+# Run specific test categories
+
+uv run python -m pytest tests/unit/ -v          # Unit tests only## 📚 API Endpointsuv run uvicorn app:app --reload --host 0.0.0.0 --port 8000
+
+uv run python -m pytest tests/integration/ -v   # Integration tests only
+
+```
+
+# Run with coverage
+
+uv run python -m pytest tests/ --cov=src --cov-report=html### GET Endpoints
+
+```
+
+- `GET /` - API informationThe API will be available at:
+
+### Frontend Tests
+
+- `GET /health` - Health check- **API endpoints**: `http://localhost:8000`
+
+```bash
+
+cd frontend- `GET /square/{number}` - Calculate square- **Interactive docs (Swagger UI)**: `http://localhost:8000/docs`
+
+
+
+# Run tests (when implemented)- `GET /factorial/{number}` - Calculate factorial- **Alternative docs (ReDoc)**: `http://localhost:8000/redoc`
+
+npm test
+
+```- `GET /fibonacci/{count}` - Generate Fibonacci sequence
+
+
+
+## 🔧 API Endpoints- `GET /prime/{number}` - Check if prime### Running Tests
+
+
+
+### Mathematical Operations
+
+
+
+| Method | Endpoint | Description | Example |### POST Endpoints```bash
+
+|--------|----------|-------------|---------|
+
+| GET | `/square/{number}` | Calculate square of number | `/square/5` → `25` |- `POST /power` - Calculate base^exponent# Run all tests (unit + integration)
+
+| POST | `/power` | Calculate power | `{"base": 2, "exponent": 8}` → `256` |
+
+| GET | `/factorial/{number}` | Calculate factorial | `/factorial/5` → `120` |- `POST /stats` - Calculate statisticsuv run python -m unittest discover -s tests -p "test_*.py" -v
+
+| GET | `/fibonacci/{n}` | Generate Fibonacci sequence | `/fibonacci/10` → `[0,1,1,2,3,5,8,13,21,34]` |
+
+| GET | `/is_prime/{number}` | Check if number is prime | `/is_prime/17` → `true` |
+
+| POST | `/statistics` | Calculate statistics | `{"numbers": [1,2,3,4,5]}` → `{"mean": 3.0, ...}` |
+
+## 🧪 Running Tests# Run specific test modules
+
+### Utility Endpoints
+
+uv run python -m unittest tests.test_math_operations -v
+
+| Method | Endpoint | Description |
+
+|--------|----------|-------------|```bashuv run python -m unittest tests.test_api_integration -v
+
+| GET | `/health` | Health check |
+
+| GET | `/docs` | Interactive API documentation |cd backenduv run python -m unittest tests.test_cli_integration -v
+
+| GET | `/openapi.json` | OpenAPI schema |
+
+
+
+## 📝 Example Usage
+
+# Run all tests# Run tests without verbose output
+
+### cURL Examples
+
+uv run python -m unittest discover -s tests -p "test_*.py" -vuv run python -m unittest discover -s tests -p "test_*.py"
+
+```bash
+
+# Square calculation```
+
+curl "http://localhost:8000/square/5"
+
+# Run specific test categories
+
+# Power calculation
+
+curl -X POST "http://localhost:8000/power" \uv run python -m unittest tests.unit.test_math_operations -v     # Unit tests### Using the CLI
+
+  -H "Content-Type: application/json" \
+
+  -d '{"base": 2, "exponent": 8}'uv run python -m unittest tests.integration.test_api_integration -v  # API tests
+
+
+
+# Factorial calculationuv run python -m unittest tests.integration.test_cli_integration -v  # CLI tests```bash
+
+curl "http://localhost:8000/factorial/5"
+
+```# Test business logic directly via command line
+
+# Fibonacci sequence
+
+curl "http://localhost:8000/fibonacci/10"uv run python cli.py square 5
+
+
+
+# Prime check## 🛠️ Developmentuv run python cli.py power 2 8
+
+curl "http://localhost:8000/is_prime/17"
+
+uv run python cli.py factorial 5
+
+# Statistics calculation
+
+curl -X POST "http://localhost:8000/statistics" \### Code Qualityuv run python cli.py fibonacci 10
+
+  -H "Content-Type: application/json" \
+
+  -d '{"numbers": [1, 2, 3, 4, 5]}'uv run python cli.py prime 17
+
+```
 
 ```bashuv run python cli.py stats 1 2 3 4 5
 
+### Python Client Example
+
 cd backend```
 
+```python
+
+import requests
 
 
-# Format code## 🌐 API Endpoints
+
+# Base URL# Format code## 🌐 API Endpoints
+
+BASE_URL = "http://localhost:8000"
 
 uv run black src/ tests/ app.py cli.py
 
-### GET Endpoints
+# Square calculation
+
+response = requests.get(f"{BASE_URL}/square/5")### GET Endpoints
+
+print(f"Square of 5: {response.json()}")
 
 # Sort imports  
 
-uv run isort src/ tests/ app.py cli.py#### Root Information
+# Power calculation
 
-```bash
+response = requests.post(f"{BASE_URL}/power", uv run isort src/ tests/ app.py cli.py#### Root Information
 
-# Type checkingcurl http://localhost:8000/
+                        json={"base": 2, "exponent": 8})
 
-uv run mypy src/# Response: API info with available endpoints and documentation links
+print(f"2^8 = {response.json()}")```bash
+
+
+
+# Statistics calculation# Type checkingcurl http://localhost:8000/
+
+response = requests.post(f"{BASE_URL}/statistics",
+
+                        json={"numbers": [1, 2, 3, 4, 5]})uv run mypy src/# Response: API info with available endpoints and documentation links
+
+print(f"Statistics: {response.json()}")
+
+``````
+
+
+
+## 🎨 Frontend Features# Linting
+
+
+
+The React frontend provides an interactive interface for all mathematical operations:uv run flake8 src/ tests/ app.py cli.py#### Health Check
+
+
+
+- **Square Calculator**: Input a number to calculate its square``````bash
+
+- **Power Calculator**: Calculate base raised to an exponent
+
+- **Factorial Calculator**: Calculate factorial of a numbercurl http://localhost:8000/health
+
+- **Fibonacci Generator**: Generate Fibonacci sequence up to n terms
+
+- **Prime Checker**: Check if a number is prime### CLI Usage# Response: {"status": "healthy", "service": "math-operations-api"}
+
+- **Statistics Calculator**: Calculate mean, median, mode, and standard deviation
 
 ```
 
-# Linting
-
-uv run flake8 src/ tests/ app.py cli.py#### Health Check
-
-``````bash
-
-curl http://localhost:8000/health
-
-### CLI Usage# Response: {"status": "healthy", "service": "math-operations-api"}
-
-```
+## 🏗️ Architecture Decisions
 
 ```bash
 
-cd backend#### Interactive Documentation
+### Backend Architecture
 
-```bash
+- **FastAPI**: Modern, fast web framework with automatic API documentationcd backend#### Interactive Documentation
 
-# Test business logic directly# Open in browser for interactive API testing
+- **Pydantic**: Data validation and serialization
 
-uv run python cli.py square 5open http://localhost:8000/docs
+- **Pure Functions**: Business logic in `math_operations.py` has no dependencies```bash
 
-uv run python cli.py power 2 8```
+- **Separation of Concerns**: API layer (`app.py`) separate from business logic
 
-uv run python cli.py factorial 5
+- **Multiple Interfaces**: Same logic accessible via REST API and CLI# Test business logic directly# Open in browser for interactive API testing
+
+
+
+### Frontend Architectureuv run python cli.py square 5open http://localhost:8000/docs
+
+- **React 18**: Modern functional components with hooks
+
+- **Vite**: Fast build tool and development serveruv run python cli.py power 2 8```
+
+- **Axios**: HTTP client with error handling
+
+- **Component-Based**: Each operation has its own componentuv run python cli.py factorial 5
+
+- **API Service Layer**: Centralized API communication logic
 
 uv run python cli.py fibonacci 10#### Calculate Square
 
-uv run python cli.py prime 17```bash
+### Testing Strategy
 
-uv run python cli.py stats 1 2 3 4 5curl http://localhost:8000/square/5
+- **Unit Tests**: Test pure business logic functionsuv run python cli.py prime 17```bash
 
-```# Response: {"operation": "square", "input": 5, "result": 25, "success": true}
+- **Integration Tests**: Test API endpoints and CLI interface
+
+- **Error Handling**: Comprehensive error scenarios covereduv run python cli.py stats 1 2 3 4 5curl http://localhost:8000/square/5
 
 
 
-## 📖 Documentationcurl http://localhost:8000/square/2.5
+## 🚀 Development Workflow```# Response: {"operation": "square", "input": 5, "result": 25, "success": true}
 
-# Response: {"operation": "square", "input": 2.5, "result": 6.25, "success": true}
 
-- **Backend API**: See `backend/` directory for detailed API documentation```
 
-- **Agent Instructions**: See `.github/agent-instructions.md` for project template instructions
+1. **Start Backend**: `cd backend && uv run python app.py`
 
-#### Calculate Factorial
+2. **Start Frontend**: `cd frontend && npm run dev`
 
-## 🎓 Educational Focus```bash
+3. **Run Tests**: `cd backend && uv run python -m pytest tests/ -v`## 📖 Documentationcurl http://localhost:8000/square/2.5
 
-curl http://localhost:8000/factorial/5
+4. **View API Docs**: Visit `http://localhost:8000/docs`
+
+5. **Use Frontend**: Visit `http://localhost:5173`# Response: {"operation": "square", "input": 2.5, "result": 6.25, "success": true}
+
+
+
+## 📚 Learning Resources- **Backend API**: See `backend/` directory for detailed API documentation```
+
+
+
+This project is designed for educational purposes. Key concepts demonstrated:- **Agent Instructions**: See `.github/agent-instructions.md` for project template instructions
+
+
+
+- **RESTful API Design**: Proper HTTP methods, status codes, and response formats#### Calculate Factorial
+
+- **Data Validation**: Input validation and error handling
+
+- **Testing Strategies**: Unit, integration, and API testing## 🎓 Educational Focus```bash
+
+- **Documentation**: Auto-generated API docs with FastAPI
+
+- **Frontend Integration**: React components consuming REST APIcurl http://localhost:8000/factorial/5
+
+- **Modern Development**: Contemporary tools and best practices
 
 This project serves as a practical example for teaching:# Response: {"operation": "factorial", "input": 5, "result": 120, "success": true}
 
+## 🤝 Contributing
+
 ```
 
-1. **API Design Principles**: RESTful endpoints, proper HTTP methods, status codes
+This is an educational project. Feel free to:
 
-2. **Separation of Concerns**: Business logic independent of interfaces#### Generate Fibonacci Sequence
+- Add new mathematical operations1. **API Design Principles**: RESTful endpoints, proper HTTP methods, status codes
 
-3. **Testing Strategies**: Unit tests for logic, integration tests for APIs```bash
+- Improve error handling
 
-4. **Full Stack Development**: Backend API with frontend clientcurl http://localhost:8000/fibonacci/8
+- Add more comprehensive tests2. **Separation of Concerns**: Business logic independent of interfaces#### Generate Fibonacci Sequence
 
-5. **Modern Development Practices**: Docker, type hints, automated testing# Response: {"operation": "fibonacci", "count": 8, "sequence": [0, 1, 1, 2, 3, 5, 8, 13], "success": true}
+- Enhance the frontend UI
+
+- Add Docker configuration3. **Testing Strategies**: Unit tests for logic, integration tests for APIs```bash
+
+
+
+## 📄 License4. **Full Stack Development**: Backend API with frontend clientcurl http://localhost:8000/fibonacci/8
+
+
+
+This project is for educational purposes. Use freely for learning and teaching API concepts.5. **Modern Development Practices**: Docker, type hints, automated testing# Response: {"operation": "fibonacci", "count": 8, "sequence": [0, 1, 1, 2, 3, 5, 8, 13], "success": true}
 
 ```
 
