@@ -9,8 +9,8 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': {
-        target: process.env.NODE_ENV === 'production' 
-          ? 'http://backend:8000'  // Docker service name
+        target: process.env.DOCKER_ENV 
+          ? 'http://backend:8000'  // Docker service name for container communication
           : 'http://localhost:8000', // Local development
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')

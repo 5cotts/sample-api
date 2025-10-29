@@ -14,6 +14,7 @@ FastAPI features demonstrated:
 - Built-in error handling
 """
 
+import os
 from typing import List, Union
 
 from fastapi import FastAPI, HTTPException
@@ -39,15 +40,16 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
+# Configure CORS origins from environment variable
+cors_origins = os.getenv(
+    "CORS_ORIGINS",
+    "http://localhost:3000,http://localhost:5173,http://127.0.0.1:3000,http://127.0.0.1:5173"
+).split(",")
+
 # Add CORS middleware to allow frontend requests
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",  # React development server
-        "http://localhost:5173",  # Vite development server (alternative port)
-        "http://127.0.0.1:3000",  # Alternative localhost format
-        "http://127.0.0.1:5173",  # Alternative localhost format
-    ],
+    allow_origins=[origin.strip() for origin in cors_origins],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
