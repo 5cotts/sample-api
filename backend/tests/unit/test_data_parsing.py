@@ -34,9 +34,9 @@ from src.data_parsing import (
 # Test file location: backend/tests/unit/test_data_parsing.py
 # Going up: unit -> tests -> backend, then into data/
 TEST_DIR = Path(__file__).parent  # backend/tests/unit/
-TESTS_DIR = TEST_DIR.parent        # backend/tests/
-BACKEND_DIR = TESTS_DIR.parent     # backend/
-DATA_DIR = BACKEND_DIR / "data"    # backend/data/
+TESTS_DIR = TEST_DIR.parent  # backend/tests/
+BACKEND_DIR = TESTS_DIR.parent  # backend/
+DATA_DIR = BACKEND_DIR / "data"  # backend/data/
 
 
 class TestLoadCSV(unittest.TestCase):
@@ -234,7 +234,9 @@ class TestMergeDataFrames(unittest.TestCase):
         employees_df = load_csv(employees_path)
         departments_df = load_csv(departments_path)
 
-        merged = merge_dataframes(employees_df, departments_df, on="department_id", how="left")
+        merged = merge_dataframes(
+            employees_df, departments_df, on="department_id", how="left"
+        )
 
         self.assertIsInstance(merged, pd.DataFrame)
         self.assertGreater(len(merged), 0)
@@ -249,7 +251,9 @@ class TestMergeDataFrames(unittest.TestCase):
         employees_df = load_csv(employees_path)
         departments_df = load_csv(departments_path)
 
-        merged = merge_dataframes(employees_df, departments_df, on="department_id", how="inner")
+        merged = merge_dataframes(
+            employees_df, departments_df, on="department_id", how="inner"
+        )
 
         self.assertIsInstance(merged, pd.DataFrame)
         self.assertGreater(len(merged), 0)
@@ -272,7 +276,9 @@ class TestMergeDataFrames(unittest.TestCase):
         departments_df = load_csv(departments_path)
 
         with self.assertRaises(ValueError):
-            merge_dataframes(employees_df, departments_df, on="department_id", how="invalid")
+            merge_dataframes(
+                employees_df, departments_df, on="department_id", how="invalid"
+            )
 
 
 class TestAggregateDataFrame(unittest.TestCase):
@@ -299,7 +305,9 @@ class TestAggregateDataFrame(unittest.TestCase):
         df = load_csv(csv_path)
 
         with self.assertRaises(ValueError):
-            aggregate_dataframe(df, group_by="nonexistent", aggregations={"salary": ["mean"]})
+            aggregate_dataframe(
+                df, group_by="nonexistent", aggregations={"salary": ["mean"]}
+            )
 
     def test_aggregate_dataframe_invalid_agg_column(self):
         """Test aggregating with non-existent aggregation column."""
@@ -421,7 +429,9 @@ class TestDataParsingIntegration(unittest.TestCase):
         departments_df = load_csv(departments_path)
 
         # Merge
-        merged = merge_dataframes(employees_df, departments_df, on="department_id", how="left")
+        merged = merge_dataframes(
+            employees_df, departments_df, on="department_id", how="left"
+        )
         self.assertGreater(len(merged), 0)
 
         # Get summary
@@ -433,4 +443,3 @@ class TestDataParsingIntegration(unittest.TestCase):
 if __name__ == "__main__":
     # Run tests if this file is executed directly
     unittest.main()
-

@@ -8,9 +8,9 @@ coding interviews and data analysis tasks.
 
 import json
 from pathlib import Path
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Union, cast
 
-import pandas as pd
+import pandas as pd  # type: ignore[import-untyped]
 
 
 def load_csv(file_path: Union[str, Path]) -> pd.DataFrame:
@@ -37,7 +37,7 @@ def load_csv(file_path: Union[str, Path]) -> pd.DataFrame:
         raise ValueError(f"Failed to parse CSV file {file_path}: {str(e)}") from e
 
 
-def load_json(file_path: Union[str, Path]) -> Union[Dict, List]:
+def load_json(file_path: Union[str, Path]) -> Union[Dict[str, Any], List[Any]]:
     """
     Load a JSON file and return its contents.
 
@@ -57,7 +57,7 @@ def load_json(file_path: Union[str, Path]) -> Union[Dict, List]:
 
     try:
         with open(path, "r", encoding="utf-8") as f:
-            return json.load(f)
+            return cast(Union[Dict[str, Any], List[Any]], json.load(f))
     except json.JSONDecodeError as e:
         raise ValueError(f"Failed to parse JSON file {file_path}: {str(e)}") from e
     except Exception as e:
@@ -171,7 +171,9 @@ def filter_dataframe(
         raise ValueError(f"Unsupported condition: {condition}")
 
 
-def save_dataframe(df: pd.DataFrame, file_path: Union[str, Path], format: str = "csv") -> None:
+def save_dataframe(
+    df: pd.DataFrame, file_path: Union[str, Path], format: str = "csv"
+) -> None:
     """
     Save a DataFrame to a file.
 
@@ -232,7 +234,9 @@ def merge_dataframes(
 
 
 def aggregate_dataframe(
-    df: pd.DataFrame, group_by: Union[str, List[str]], aggregations: Dict[str, List[str]]
+    df: pd.DataFrame,
+    group_by: Union[str, List[str]],
+    aggregations: Dict[str, List[str]],
 ) -> pd.DataFrame:
     """
     Aggregate DataFrame by grouping and applying functions.
@@ -261,4 +265,3 @@ def aggregate_dataframe(
             raise ValueError(f"Aggregation column '{col}' not found in DataFrame")
 
     return df.groupby(group_by).agg(aggregations).reset_index()
-
