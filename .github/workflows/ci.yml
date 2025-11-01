@@ -34,6 +34,7 @@ jobs:
             -v "$(pwd):/app" \
             -w /app \
             -e UV_PROJECT_ENVIRONMENT=/tmp/.venv \
+            --user $(id -u):$(id -g) \
             sample-api-backend bash -c "
               uv sync --dev && \
               uv run black --check . && \
@@ -62,5 +63,6 @@ jobs:
             -v "$(pwd):/app" \
             -w /app \
             -e UV_PROJECT_ENVIRONMENT=/tmp/.venv \
+            --user $(id -u):$(id -g) \
             sample-api-backend bash -c "uv sync --dev && uv run python -m unittest discover -s tests/unit -p 'test_*.py' -v"
 
