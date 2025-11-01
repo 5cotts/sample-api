@@ -166,6 +166,65 @@ uv run python -m unittest tests.integration.test_api_integration -v    # API tes
 uv run python -m unittest tests.integration.test_cli_integration -v    # CLI tests (27)
 ```
 
+## 🔍 Code Quality & Linting
+
+The project uses multiple tools to maintain code quality:
+- **black**, **isort**, **mypy**: Configured in `backend/pyproject.toml`
+- **flake8**: Configured in `backend/.flake8`
+
+### Formatting
+```bash
+cd backend
+
+# Format code with black
+uv run black .
+
+# Sort imports with isort
+uv run isort .
+```
+
+### Type Checking
+```bash
+cd backend
+
+# Run mypy type checking
+uv run mypy src/
+```
+
+### Linting
+```bash
+cd backend
+
+# Run flake8 style linting
+uv run flake8 src/ app.py cli.py
+
+# Or lint entire directory (excludes .venv, __pycache__, etc.)
+uv run flake8 .
+```
+
+### Run All Checks
+```bash
+cd backend
+
+# Format code
+uv run black .
+
+# Sort imports
+uv run isort .
+
+# Type checking
+uv run mypy src/
+
+# Linting
+uv run flake8 .
+```
+
+All tools are configured to work together:
+- **black**: Code formatter (88 character line length)
+- **isort**: Import sorter (configured to work with black)
+- **mypy**: Static type checker (strict mode)
+- **flake8**: Style guide enforcement
+
 ## 🛠️ Technology Stack
 
 ### Backend
@@ -277,5 +336,56 @@ This is an educational project designed to demonstrate full-stack development co
 - **Docker Documentation**: https://docs.docker.com/
 - **API Design Best Practices**: REST principles, HTTP status codes, error handling
 - **Full-Stack Architecture**: Separation of concerns, service communication, deployment strategies
+
+## 🤖 AI-Assisted Development with Cursor
+
+This project is optimized for AI-assisted development using [Cursor IDE](https://cursor.sh/). The project structure includes AGENTS.md files that provide context-aware instructions to AI agents.
+
+### AGENTS.md Structure
+
+The project uses a hierarchical AGENTS.md system:
+- **Root [AGENTS.md](AGENTS.md)**: Overview and navigation for the entire project
+- **Backend [backend/AGENTS.md](backend/AGENTS.md)**: Backend-specific template instructions
+- **Frontend [frontend/AGENTS.md](frontend/AGENTS.md)**: Frontend patterns and architecture
+- **Components [frontend/src/components/AGENTS.md](frontend/src/components/AGENTS.md)**: Component development guidelines
+
+### How It Works
+
+When working in a specific directory, Cursor (and other AI tools) automatically reference the nearest AGENTS.md file:
+- Working in `backend/` → Uses `backend/AGENTS.md` for backend-specific context
+- Working in `frontend/src/components/` → Uses component-specific guidelines
+- Working at project root → Uses global instructions from root `AGENTS.md`
+
+### Custom Cursor Commands
+
+The project includes custom commands in `.cursor/commands/`:
+
+- **`/commit-message`**: Generate conventional commit messages following project standards
+- **`/pr-summary`**: Generate PR descriptions with conventional commit format
+- **`/setup-repo`**: Generate repository setup guide based on AGENTS.md files
+
+### Benefits
+
+- **Context-Aware Assistance**: AI agents understand project structure and patterns based on current directory
+- **Consistent Patterns**: AGENTS.md files ensure AI follows established patterns and conventions
+- **Template-Friendly**: Easy to adapt the project structure for new domains while maintaining patterns
+- **Better Code Generation**: AI agents generate code that matches project architecture and style
+
+### Getting Started with Cursor
+
+1. Open the project in Cursor IDE
+2. Navigate to any directory - Cursor will automatically reference the relevant AGENTS.md
+3. Use `@AGENTS.md` in chat to explicitly reference instructions
+4. Try the custom commands (`/commit-message`, `/pr-summary`, `/setup-repo`) for common tasks
+
+The AGENTS.md system enables more accurate and context-aware AI assistance throughout the development process.
+
+## 📚 Additional Documentation
+
+- **Using as a Template**: See [AGENTS.md](AGENTS.md) for template instructions and customization guide
+- **Backend Template Guide**: See [backend/AGENTS.md](backend/AGENTS.md) for complete backend template
+- **Frontend Patterns**: See [frontend/AGENTS.md](frontend/AGENTS.md) for React application patterns
+- **Component Guidelines**: See [frontend/src/components/AGENTS.md](frontend/src/components/AGENTS.md) for component patterns
+- **Template Documentation**: See [docs/template/](docs/template/) for detailed template files
 
 *This project serves as a comprehensive example of modern full-stack development, demonstrating how to build scalable, maintainable applications with clear architectural boundaries and comprehensive testing.*
