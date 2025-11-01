@@ -26,6 +26,33 @@ jobs:
         working-directory: ./frontend
         run: docker build -t sample-api-frontend .
 
+      # Backend linting
+      - name: Run backend linting
+        working-directory: ./backend
+        run: |
+          docker run --rm \
+            -v "$(pwd):/app" \
+            -w /app \
+            sample-api-backend bash -c "
+              uv sync --dev && \
+              uv run black --check . && \
+              uv run isort --check-only . && \
+              uv run flake8 src/ app.py cli.py && \
+              uv run mypy src/
+            "
+
+      # Frontend linting
+      - name: Run frontend linting
+        working-directory: ./frontend
+        run: |
+          docker run --rm \
+            -v "$(pwd):/app" \
+            -w /app \
+            node:18-alpine sh -c "
+              npm ci && \
+              npm run lint
+            "
+
       # Run backend unit tests in the Docker container
       - name: Run backend unit tests
         working-directory: ./backend
