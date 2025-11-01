@@ -225,6 +225,55 @@ All tools are configured to work together:
 - **mypy**: Static type checker (strict mode)
 - **flake8**: Style guide enforcement
 
+## 🔄 CI/CD Pipeline
+
+The project includes a GitHub Actions CI pipeline that automatically runs on every push and pull request to verify code quality and build success.
+
+### What the CI Pipeline Checks
+
+1. **Docker Builds**: Verifies that both backend and frontend Docker images build successfully
+   - Backend Docker image compilation
+   - Frontend Docker image compilation
+
+2. **Backend Linting**: Enforces code quality standards for Python code
+   - `black` - Code formatting check
+   - `isort` - Import sorting validation
+   - `flake8` - Style guide enforcement
+   - `mypy` - Type checking
+
+3. **Frontend Linting**: Ensures JavaScript/React code quality
+   - ESLint with React-specific rules
+
+4. **Backend Unit Tests**: Verifies all unit tests pass
+   - Runs all tests in `backend/tests/unit/`
+
+### CI Status
+
+The CI pipeline runs automatically on:
+- Every push to any branch
+- All pull requests to `main`
+
+All checks must pass before code can be merged, ensuring consistent code quality across the project.
+
+### Local CI Verification
+
+You can run the same checks locally before pushing:
+
+```bash
+# Backend checks
+cd backend
+uv run black --check .
+uv run isort --check-only .
+uv run flake8 src/ app.py cli.py
+uv run mypy src/
+uv run python -m unittest discover -s tests/unit -p 'test_*.py' -v
+
+# Frontend checks
+cd frontend
+npm ci
+npm run lint
+```
+
 ## 🛠️ Technology Stack
 
 ### Backend
@@ -242,8 +291,10 @@ All tools are configured to work together:
 ### Development & Deployment
 - **uv**: Fast Python package manager
 - **Docker & Docker Compose**: Containerization and orchestration
+- **GitHub Actions**: CI/CD pipeline for automated testing and linting
 - **pytest/unittest**: Comprehensive testing framework
-- **Black, isort, mypy**: Code formatting and quality tools
+- **Black, isort, mypy, flake8**: Code formatting and quality tools
+- **ESLint**: JavaScript/React code linting
 
 ## 📚 Educational Value
 
@@ -274,6 +325,7 @@ This project demonstrates key software engineering concepts:
 
 ### 5. **Production-Ready Patterns**
 - Docker containerization for consistent deployment
+- CI/CD pipeline with automated testing and linting
 - Health checks and monitoring endpoints
 - CORS configuration for cross-origin requests
 - Comprehensive error handling and logging
@@ -317,7 +369,7 @@ This project is designed for educational purposes. Key areas for exploration:
 - Add UI component library (Material-UI, Tailwind)
 
 ### DevOps & Infrastructure
-- Add CI/CD pipelines (GitHub Actions)
+- ✅ CI/CD pipelines (GitHub Actions) - Implemented
 - Implement monitoring (Prometheus, Grafana)
 - Add load balancing (Nginx)
 - Database migrations and seeding
