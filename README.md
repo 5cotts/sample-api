@@ -166,6 +166,65 @@ uv run python -m unittest tests.integration.test_api_integration -v    # API tes
 uv run python -m unittest tests.integration.test_cli_integration -v    # CLI tests (27)
 ```
 
+## 🔍 Code Quality & Linting
+
+The project uses multiple tools to maintain code quality:
+- **black**, **isort**, **mypy**: Configured in `backend/pyproject.toml`
+- **flake8**: Configured in `backend/.flake8`
+
+### Formatting
+```bash
+cd backend
+
+# Format code with black
+uv run black .
+
+# Sort imports with isort
+uv run isort .
+```
+
+### Type Checking
+```bash
+cd backend
+
+# Run mypy type checking
+uv run mypy src/
+```
+
+### Linting
+```bash
+cd backend
+
+# Run flake8 style linting
+uv run flake8 src/ app.py cli.py
+
+# Or lint entire directory (excludes .venv, __pycache__, etc.)
+uv run flake8 .
+```
+
+### Run All Checks
+```bash
+cd backend
+
+# Format code
+uv run black .
+
+# Sort imports
+uv run isort .
+
+# Type checking
+uv run mypy src/
+
+# Linting
+uv run flake8 .
+```
+
+All tools are configured to work together:
+- **black**: Code formatter (88 character line length)
+- **isort**: Import sorter (configured to work with black)
+- **mypy**: Static type checker (strict mode)
+- **flake8**: Style guide enforcement
+
 ## 🛠️ Technology Stack
 
 ### Backend

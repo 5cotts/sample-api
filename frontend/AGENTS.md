@@ -153,6 +153,30 @@ npm run dev
 npm run build
 ```
 
+## Code Quality & Linting
+
+**Tool Configuration:**
+- **ESLint**: Configured in `.eslintrc.cjs`
+- React-specific plugins: `eslint-plugin-react`, `eslint-plugin-react-hooks`, `eslint-plugin-react-refresh`
+
+**Running Linting:**
+```bash
+# Run ESLint
+npm run lint
+
+# The lint script enforces:
+# - No unused variables
+# - React Hooks rules
+# - React best practices
+# - Maximum warnings: 0 (strict mode)
+```
+
+**ESLint Configuration:**
+- Configured for React 18+ with JSX support
+- Enforces React Hooks rules
+- Reports unused disable directives
+- Zero warnings allowed (strict enforcement)
+
 ## API Integration
 
 When backend endpoints change:

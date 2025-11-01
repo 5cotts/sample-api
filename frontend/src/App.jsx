@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import SquareCalculator from './components/SquareCalculator';
 import PowerCalculator from './components/PowerCalculator';
 import FactorialCalculator from './components/FactorialCalculator';

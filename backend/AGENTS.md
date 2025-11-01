@@ -81,6 +81,8 @@ module = "tests.*"
 disallow_untyped_defs = false
 ```
 
+**Note:** `flake8` configuration is in `.flake8` (not `pyproject.toml`), configured to match black's 88 character line length.
+
 Install: `uv sync --dev`
 
 ## 2. Business Logic: src/math_operations.py
@@ -155,13 +157,33 @@ uv run python -m unittest discover -s tests -p "test_*.py" -v
 
 ## 6. Code Quality
 
-**Formatting:**
+**Tool Configuration:**
+- **black**, **isort**, **mypy**: Configured in `pyproject.toml`
+- **flake8**: Configured in `.flake8` (88 character line length, matches black)
+
+**Running Code Quality Tools:**
 ```bash
+# Format code
 uv run black .
+
+# Sort imports
 uv run isort .
+
+# Type checking
 uv run mypy src/
+
+# Linting
 uv run flake8 .
+
+# Run all checks
+uv run black . && uv run isort . && uv run mypy src/ && uv run flake8 .
 ```
+
+**Tools:**
+- **black**: Code formatter (88 char line length)
+- **isort**: Import sorter (configured for black compatibility)
+- **mypy**: Static type checker (strict mode)
+- **flake8**: Style guide enforcement (line length enforced by black)
 
 ## Customization Guide
 
