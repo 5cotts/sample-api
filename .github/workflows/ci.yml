@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Build backend Docker image (verifies compilation)
+      - name: Build backend Docker image
+        working-directory: ./backend
+        run: docker build -t sample-api-backend .
+
+      # Build frontend Docker image (verifies compilation)
+      - name: Build frontend Docker image
+        working-directory: ./frontend
+        run: docker build -t sample-api-frontend .
+
+      # Run backend unit tests in the Docker container
+      - name: Run backend unit tests
+        working-directory: ./backend
+        run: |
+          docker run --rm \
+            -v "$(pwd):/app" \
+            -w /app \
+            sample-api-backend bash -c "uv sync --dev && uv run python -m unittest discover -s tests/unit -p 'test_*.py' -v"
+
