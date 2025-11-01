@@ -9,7 +9,7 @@ Components in this directory follow a consistent pattern for interacting with th
 Every component should follow this structure:
 
 ```javascript
-import React, { useState } from 'react';
+import { useState } from 'react';
 import MathAPI from '../services/api';
 
 function OperationComponent() {
