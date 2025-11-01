@@ -33,10 +33,7 @@ jobs:
           docker run --rm \
             -v "$(pwd):/app" \
             -w /app \
-            -e UV_PROJECT_ENVIRONMENT=/tmp/.venv \
-            --user $(id -u):$(id -g) \
             sample-api-backend bash -c "
-              uv sync --dev && \
               uv run black --check . && \
               uv run isort --check-only . && \
               uv run flake8 src/ app.py cli.py && \
@@ -62,7 +59,5 @@ jobs:
           docker run --rm \
             -v "$(pwd):/app" \
             -w /app \
-            -e UV_PROJECT_ENVIRONMENT=/tmp/.venv \
-            --user $(id -u):$(id -g) \
-            sample-api-backend bash -c "uv sync --dev && uv run python -m unittest discover -s tests/unit -p 'test_*.py' -v"
+            sample-api-backend bash -c "uv run python -m unittest discover -s tests/unit -p 'test_*.py' -v"
 
