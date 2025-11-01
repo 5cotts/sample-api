@@ -37,7 +37,9 @@ def load_csv(file_path: Union[str, Path]) -> pd.DataFrame:
         raise ValueError(f"Failed to parse CSV file {file_path}: {str(e)}") from e
 
 
-def load_json(file_path: Union[str, Path]) -> Union[Dict[str, Any], List[Any]]:
+def load_json(
+    file_path: Union[str, Path],
+) -> Union[Dict[str, Any], List[Dict[str, Any]]]:
     """
     Load a JSON file and return its contents.
 
@@ -45,7 +47,7 @@ def load_json(file_path: Union[str, Path]) -> Union[Dict[str, Any], List[Any]]:
         file_path: Path to the JSON file
 
     Returns:
-        Parsed JSON data (dict or list)
+        Parsed JSON data (dict or list of dicts)
 
     Raises:
         FileNotFoundError: If the file doesn't exist
@@ -57,14 +59,16 @@ def load_json(file_path: Union[str, Path]) -> Union[Dict[str, Any], List[Any]]:
 
     try:
         with open(path, "r", encoding="utf-8") as f:
-            return cast(Union[Dict[str, Any], List[Any]], json.load(f))
+            return cast(Union[Dict[str, Any], List[Dict[str, Any]]], json.load(f))
     except json.JSONDecodeError as e:
         raise ValueError(f"Failed to parse JSON file {file_path}: {str(e)}") from e
     except Exception as e:
         raise ValueError(f"Error reading file {file_path}: {str(e)}") from e
 
 
-def json_to_dataframe(data: Union[Dict, List]) -> pd.DataFrame:
+def json_to_dataframe(
+    data: Union[Dict[str, Any], List[Dict[str, Any]]],
+) -> pd.DataFrame:
     """
     Convert JSON data (dict or list of dicts) to a pandas DataFrame.
 
