@@ -59,4 +59,4 @@ ehthumbs.db
 Thumbs.db
 
 # uv
-uv.lock
+# uv.lock - Keep lock file for reproducible builds
