@@ -128,12 +128,12 @@ class TemplateValidator:
                 tree = ast.parse(content)
             
             # Check for FastAPI import
-            imports = [
-                node.names[0].name for node in ast.walk(tree)
+            import_modules = [
+                node.module for node in ast.walk(tree)
                 if isinstance(node, ast.ImportFrom) and node.module
             ]
             
-            if 'fastapi' in str(imports):
+            if any('fastapi' in str(module) for module in import_modules):
                 print("  ✓ FastAPI imported")
             else:
                 self.errors.append("FastAPI not imported in app.py")
