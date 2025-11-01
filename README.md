@@ -278,4 +278,12 @@ This is an educational project designed to demonstrate full-stack development co
 - **API Design Best Practices**: REST principles, HTTP status codes, error handling
 - **Full-Stack Architecture**: Separation of concerns, service communication, deployment strategies
 
+## 📚 Additional Documentation
+
+- **Using as a Template**: See [AGENTS.md](AGENTS.md) for template instructions and customization guide
+- **Backend Template Guide**: See [backend/AGENTS.md](backend/AGENTS.md) for complete backend template
+- **Frontend Patterns**: See [frontend/AGENTS.md](frontend/AGENTS.md) for React application patterns
+- **Component Guidelines**: See [frontend/src/components/AGENTS.md](frontend/src/components/AGENTS.md) for component patterns
+- **Template Documentation**: See [docs/template/](docs/template/) for detailed template files
+
 *This project serves as a comprehensive example of modern full-stack development, demonstrating how to build scalable, maintainable applications with clear architectural boundaries and comprehensive testing.*
