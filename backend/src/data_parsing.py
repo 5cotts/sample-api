@@ -6,11 +6,13 @@ These functions demonstrate common data processing patterns that may be useful i
 coding interviews and data analysis tasks.
 """
 
+import io
 import json
 from pathlib import Path
 from typing import Any, Dict, List, Union, cast
 
 import pandas as pd  # type: ignore[import-untyped]
+import requests  # type: ignore[import-untyped]
 
 
 def load_csv(file_path: Union[str, Path]) -> pd.DataFrame:
@@ -64,6 +66,72 @@ def load_json(
         raise ValueError(f"Failed to parse JSON file {file_path}: {str(e)}") from e
     except Exception as e:
         raise ValueError(f"Error reading file {file_path}: {str(e)}") from e
+
+
+def fetch_and_parse_url(
+    url: str, format: str = "auto"
+) -> Union[pd.DataFrame, Dict[str, Any], List[Dict[str, Any]]]:
+    """
+    Fetch data from a URL using requests.get and parse it.
+
+    Args:
+        url: URL to fetch data from
+        format: Format to parse ('json', 'csv', or 'auto' to detect from content-type)
+
+    Returns:
+        Parsed data as DataFrame (for CSV) or dict/list (for JSON)
+
+    Raises:
+        requests.RequestException: If the HTTP request fails
+        ValueError: If the data cannot be parsed
+    """
+    try:
+        response = requests.get(url, timeout=30)
+        response.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        raise requests.exceptions.RequestException(
+            f"Failed to fetch URL {url}: {str(e)}"
+        ) from e
+
+    # Auto-detect format from content-type if not specified
+    if format == "auto":
+        content_type = response.headers.get("content-type", "").lower()
+        if "json" in content_type:
+            format = "json"
+        elif "csv" in content_type or "text/csv" in content_type:
+            format = "csv"
+        else:
+            # Try to detect from URL extension
+            if url.lower().endswith(".json"):
+                format = "json"
+            elif url.lower().endswith(".csv"):
+                format = "csv"
+            else:
+                # Default to JSON if content looks like JSON
+                try:
+                    response.json()
+                    format = "json"
+                except (ValueError, json.JSONDecodeError):
+                    format = "csv"
+
+    format_lower = format.lower()
+
+    try:
+        if format_lower == "json":
+            return cast(
+                Union[Dict[str, Any], List[Dict[str, Any]]], response.json()
+            )
+        elif format_lower == "csv":
+            return pd.read_csv(io.StringIO(response.text))
+        else:
+            raise ValueError(f"Unsupported format: {format}. Use 'json' or 'csv'")
+    except json.JSONDecodeError as e:
+        raise ValueError(f"Failed to parse JSON from URL {url}: {str(e)}") from e
+    except Exception as e:
+        raise ValueError(
+            f"Failed to parse {format} data from URL {url}: {str(e)}"
+        ) from e
+
 
 
 def json_to_dataframe(
@@ -274,3 +342,7 @@ def aggregate_dataframe(
 if __name__ == "__main__":
     df = load_csv("data/sample_data.csv")
     print(dataframe_summary(df))
+
+    # Auto-detect format
+    data = fetch_and_parse_url("https://rest.ensembl.org/info/ping")
+    print(data)
