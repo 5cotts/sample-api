@@ -60,3 +60,8 @@ Thumbs.db
 
 # uv
 # uv.lock - Keep lock file for reproducible builds
+
+# Frontend / Node.js
+node_modules/
+.vite/
+# dist/ already covered above

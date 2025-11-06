@@ -269,3 +269,8 @@ def aggregate_dataframe(
             raise ValueError(f"Aggregation column '{col}' not found in DataFrame")
 
     return df.groupby(group_by).agg(aggregations).reset_index()
+
+
+if __name__ == "__main__":
+    df = load_csv("data/sample_data.csv")
+    print(dataframe_summary(df))
