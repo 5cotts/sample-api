@@ -133,7 +133,6 @@ def fetch_and_parse_url(
         ) from e
 
 
-
 def json_to_dataframe(
     data: Union[Dict[str, Any], List[Dict[str, Any]]],
 ) -> pd.DataFrame:
@@ -208,7 +207,9 @@ def filter_dataframe(
     Args:
         df: pandas DataFrame to filter
         column: Column name to filter on
-        condition: Condition operator ('>', '<', '==', '!=', '>=', '<=', 'in', 'contains')
+        condition: Condition operator (
+            '>', '<', '==', '!=', '>=', '<=', 'in', 'contains'
+        )
         value: Value to compare against
 
     Returns:
