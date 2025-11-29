@@ -19,7 +19,7 @@ Usage:
 import argparse
 import sys
 
-from src.math_operations import (
+from src.math_operations_functional import (
     calculate_stats,
     factorial,
     fibonacci,

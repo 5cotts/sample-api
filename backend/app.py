@@ -22,7 +22,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
-from src.math_operations import (
+from src.math_operations_functional import (
     calculate_stats,
     factorial,
     fibonacci,

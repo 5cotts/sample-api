@@ -118,9 +118,7 @@ def fetch_and_parse_url(
 
     try:
         if format_lower == "json":
-            return cast(
-                Union[Dict[str, Any], List[Dict[str, Any]]], response.json()
-            )
+            return cast(Union[Dict[str, Any], List[Dict[str, Any]]], response.json())
         elif format_lower == "csv":
             return pd.read_csv(io.StringIO(response.text))
         else:

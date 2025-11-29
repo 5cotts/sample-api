@@ -1,9 +1,12 @@
 """
-Business Logic Module for Mathematical Operations
+Business Logic Module for Mathematical Operations (Functional Implementation)
 
 This module contains pure business logic functions that can be used
 independently of any API implementation. This demonstrates the important
 principle of separating business logic from API infrastructure.
+
+This is the functional programming implementation. For an object-oriented
+alternative, see math_operations_oop.py.
 
 These functions are designed to be:
 - Pure functions with no side effects
