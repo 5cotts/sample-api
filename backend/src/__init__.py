@@ -6,7 +6,7 @@ All functions are designed to be pure, testable, and reusable across
 different interfaces (API, CLI, etc.).
 """
 
-from .math_operations import (
+from .math_operations_functional import (
     calculate_stats,
     factorial,
     fibonacci,
