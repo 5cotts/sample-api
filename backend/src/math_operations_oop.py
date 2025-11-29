@@ -141,7 +141,7 @@ class MathOperations:
         """
         Generate the first n numbers in the Fibonacci sequence.
 
-        As a class method, this could be extended to cache sequences
+        As an instance method, this could be extended to cache sequences
         or maintain a history of generated sequences as instance state.
 
         Args:
