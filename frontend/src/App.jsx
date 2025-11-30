@@ -7,39 +7,39 @@ import PrimeChecker from './components/PrimeChecker';
 import StatisticsCalculator from './components/StatisticsCalculator';
 import MathAPI from './services/api';
 
+// Style constants - defined outside component to avoid recreation on every render
+const statusContainerStyle = {
+  marginTop: '1rem',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '0.5rem',
+  alignItems: 'center'
+};
+
+const implementationBadgeStyle = {
+  marginTop: '0.5rem',
+  padding: '0.4rem 0.8rem',
+  borderRadius: '20px',
+  background: 'rgba(255, 255, 255, 0.2)',
+  backdropFilter: 'blur(10px)',
+  fontSize: '0.9rem',
+  fontWeight: '500',
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: '0.5rem'
+};
+
+const getImplementationTextStyle = (impl) => ({
+  textTransform: 'uppercase',
+  fontWeight: '600',
+  color: impl === 'object-oriented' ? '#ffd700' : '#90ee90',
+  letterSpacing: '0.5px'
+});
+
 function App() {
   const [apiStatus, setApiStatus] = useState('checking');
   const [apiInfo, setApiInfo] = useState(null);
   const [implementation, setImplementation] = useState(null);
-
-  // Style constants
-  const statusContainerStyle = {
-    marginTop: '1rem',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '0.5rem',
-    alignItems: 'center'
-  };
-
-  const implementationBadgeStyle = {
-    marginTop: '0.5rem',
-    padding: '0.4rem 0.8rem',
-    borderRadius: '20px',
-    background: 'rgba(255, 255, 255, 0.2)',
-    backdropFilter: 'blur(10px)',
-    fontSize: '0.9rem',
-    fontWeight: '500',
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: '0.5rem'
-  };
-
-  const getImplementationTextStyle = (impl) => ({
-    textTransform: 'uppercase',
-    fontWeight: '600',
-    color: impl === 'object-oriented' ? '#ffd700' : '#90ee90',
-    letterSpacing: '0.5px'
-  });
 
   useEffect(() => {
     checkApiStatus();

@@ -24,14 +24,17 @@ Usage:
 import argparse
 import os
 import sys
-from typing import Callable, Dict, Tuple
+from typing import Callable, Dict, Tuple, Union
+
+# Type alias for math operation functions
+MathFunction = Callable[..., Union[int, float, bool, list, dict]]
 
 # Determine which implementation to use
 # Priority: CLI argument > environment variable > default (functional)
 MATH_IMPL = os.getenv("MATH_OPERATIONS_IMPL", "functional").lower()
 
 
-def load_implementation(impl_type: str) -> Tuple[Dict[str, Callable], str]:
+def load_implementation(impl_type: str) -> Tuple[Dict[str, MathFunction], str]:
     """
     Load the specified math operations implementation.
     
