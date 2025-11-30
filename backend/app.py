@@ -17,7 +17,7 @@ FastAPI features demonstrated:
 import os
 from typing import List, Union
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
@@ -318,7 +318,7 @@ async def api_calculate_stats(request: StatsRequest) -> StatsResponse:
 
 # Custom exception handler for better error responses
 @app.exception_handler(Exception)
-async def general_exception_handler(request: object, exc: Exception) -> JSONResponse:
+async def general_exception_handler(request: Request, exc: Exception) -> JSONResponse:
     """Handle unexpected exceptions gracefully."""
     return JSONResponse(
         status_code=500,
