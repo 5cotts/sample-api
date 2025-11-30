@@ -15,7 +15,8 @@ from typing import Callable, Dict, Tuple, Union
 MathFunction = Callable[..., Union[int, float, bool, list, dict]]
 
 # Determine which implementation to use based on environment variable
-# Priority: CLI argument > environment variable > default (functional)
+# Set MATH_OPERATIONS_IMPL="oop" to use object-oriented implementation
+# Set MATH_OPERATIONS_IMPL="functional" or leave unset to use functional implementation
 MATH_IMPL = os.getenv("MATH_OPERATIONS_IMPL", "functional").lower()
 
 
