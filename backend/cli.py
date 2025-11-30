@@ -234,7 +234,7 @@ def main():
         args = parser.parse_args()
 
         # Determine implementation (CLI argument overrides env var)
-        impl = args.impl.lower() if args.impl else MATH_IMPL
+        impl = args.impl.lower() if args.impl is not None else MATH_IMPL
 
         # Override implementation if CLI argument provided
         if impl == "oop" and MATH_IMPL != "oop":

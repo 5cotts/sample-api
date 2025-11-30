@@ -90,8 +90,7 @@ class TestCLICommands(unittest.TestCase):
         self.assertIn("Result: 120", result_oop.stdout)
 
         # Both should produce the same result
-        self.assertIn("Result: 120", result_func.stdout)
-        self.assertIn("Result: 120", result_oop.stdout)
+
 
 
 class TestSquareCommand(unittest.TestCase):
