@@ -14,9 +14,16 @@ backend/
 ├── pyproject.toml       # Dependencies & tool configuration
 ├── src/
 │   ├── __init__.py
-│   └── math_operations.py    # Business logic functions
+│   └── math_operations/      # Math operations package
+│       ├── __init__.py       # Package exports
+│       ├── functional.py     # Functional implementation
+│       └── oop.py           # Object-oriented implementation
 ├── tests/
 │   ├── unit/                 # Unit tests for business logic
+│   │   ├── math_operations/ # Tests matching source structure
+│   │   │   ├── test_functional.py
+│   │   │   └── test_oop.py
+│   │   └── test_data_parsing.py
 │   └── integration/         # Integration tests for API/CLI
 ├── app.py                    # FastAPI REST API
 └── cli.py                    # Command-line interface
@@ -85,11 +92,15 @@ disallow_untyped_defs = false
 
 Install: `uv sync --dev`
 
-## 2. Business Logic: src/math_operations.py
+## 2. Business Logic: src/math_operations/
 
 **Key Principle:** Pure functions with no side effects. Easily testable and reusable.
 
-Create `src/math_operations.py` with stubbed functions. See `docs/template/business-logic.md` for complete template with all 6 functions (square, power, factorial, fibonacci, is_prime, calculate_stats).
+The project includes two implementations:
+- **Functional**: `src/math_operations/functional.py` - Pure functions (default)
+- **Object-Oriented**: `src/math_operations/oop.py` - Class-based implementation
+
+For template projects, create `src/math_operations.py` with stubbed functions. See `docs/template/business-logic.md` for complete template with all 6 functions (square, power, factorial, fibonacci, is_prime, calculate_stats).
 
 **Requirements:**
 - Proper type hints
@@ -146,7 +157,8 @@ Create `cli.py` with command-line interface. See `docs/template/cli-patterns.md`
 ## 5. Testing
 
 **Structure:**
-- `tests/unit/test_math_operations.py` - Unit tests for business logic
+- `tests/unit/math_operations/test_functional.py` - Unit tests for functional implementation
+- `tests/unit/math_operations/test_oop.py` - Unit tests for OOP implementation
 - `tests/integration/test_api_integration.py` - API endpoint tests
 - `tests/integration/test_cli_integration.py` - CLI command tests
 
@@ -192,7 +204,8 @@ uv run black . && uv run isort . && uv run mypy src/ && uv run flake8 .
 - `{domain}` → domain name
 
 ### Update Business Logic
-- Replace function logic inside `src/math_operations.py`
+- For template projects: Replace function logic inside `src/math_operations.py`
+- For this project: Update implementations in `src/math_operations/functional.py` and/or `src/math_operations/oop.py`
 - Keep same function signatures initially
 - Maintain error handling patterns
 - Update docstrings for domain functionality

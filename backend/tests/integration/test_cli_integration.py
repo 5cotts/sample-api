@@ -46,6 +46,52 @@ class TestCLICommands(unittest.TestCase):
         self.assertIn("square", result.stdout)
         self.assertIn("power", result.stdout)
         self.assertIn("factorial", result.stdout)
+        self.assertIn("--impl", result.stdout)  # Verify --impl option is shown
+
+    def test_cli_implementation_indicator(self):
+        """Test that CLI shows which implementation is being used."""
+        result = self.run_cli_command("square", "5")
+        self.assertEqual(result.returncode, 0)
+        self.assertIn("Mathematical Operations CLI", result.stdout)
+        self.assertIn("Using", result.stdout)
+        self.assertIn("implementation", result.stdout)
+
+    def test_cli_functional_implementation(self):
+        """Test CLI with functional implementation (default)."""
+        result = self.run_cli_command("square", "5")
+        self.assertEqual(result.returncode, 0)
+        # Should show functional implementation by default
+        self.assertIn("functional", result.stdout.lower())
+
+    def test_cli_oop_implementation_via_arg(self):
+        """Test CLI with OOP implementation via --impl argument."""
+        result = self.run_cli_command("--impl", "oop", "square", "5")
+        self.assertEqual(result.returncode, 0)
+        self.assertIn("object-oriented", result.stdout.lower())
+        self.assertIn("Result: 25", result.stdout)
+
+    def test_cli_functional_implementation_via_arg(self):
+        """Test CLI with functional implementation via --impl argument."""
+        result = self.run_cli_command("--impl", "functional", "square", "5")
+        self.assertEqual(result.returncode, 0)
+        self.assertIn("functional", result.stdout.lower())
+        self.assertIn("Result: 25", result.stdout)
+
+    def test_cli_implementation_switching(self):
+        """Test that both implementations produce the same results."""
+        # Test with functional
+        result_func = self.run_cli_command("--impl", "functional", "factorial", "5")
+        self.assertEqual(result_func.returncode, 0)
+        self.assertIn("Result: 120", result_func.stdout)
+
+        # Test with OOP
+        result_oop = self.run_cli_command("--impl", "oop", "factorial", "5")
+        self.assertEqual(result_oop.returncode, 0)
+        self.assertIn("Result: 120", result_oop.stdout)
+
+        # Both should produce the same result
+        self.assertIn("Result: 120", result_func.stdout)
+        self.assertIn("Result: 120", result_oop.stdout)
 
 
 class TestSquareCommand(unittest.TestCase):

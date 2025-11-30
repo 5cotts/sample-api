@@ -22,14 +22,36 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
-from src.math_operations_functional import (
-    calculate_stats,
-    factorial,
-    fibonacci,
-    is_prime,
-    power,
-    square,
-)
+# Determine which implementation to use based on environment variable
+# Set MATH_OPERATIONS_IMPL="oop" to use object-oriented implementation
+# Set MATH_OPERATIONS_IMPL="functional" or leave unset to use functional implementation
+MATH_IMPL = os.getenv("MATH_OPERATIONS_IMPL", "functional").lower()
+
+if MATH_IMPL == "oop":
+    # Use OOP implementation
+    from src.math_operations.oop import MathOperations
+
+    _calculator = MathOperations()
+    # Bind instance methods to function names for compatibility
+    square = _calculator.square
+    power = _calculator.power
+    factorial = _calculator.factorial
+    fibonacci = _calculator.fibonacci
+    is_prime = _calculator.is_prime
+    calculate_stats = _calculator.calculate_stats
+    _implementation = "object-oriented"
+else:
+    # Use functional implementation (default)
+    from src.math_operations.functional import (
+        calculate_stats,
+        factorial,
+        fibonacci,
+        is_prime,
+        power,
+        square,
+    )
+
+    _implementation = "functional"
 
 # Create FastAPI app with metadata
 app = FastAPI(
@@ -190,7 +212,10 @@ async def health_check() -> HealthResponse:
     """
     Health check endpoint to verify API is running.
     """
-    return HealthResponse(status="healthy", service="math-operations-api")
+    return HealthResponse(
+        status="healthy",
+        service=f"math-operations-api ({_implementation})",
+    )
 
 
 @app.get("/square/{number}", response_model=SquareResponse)
@@ -293,7 +318,7 @@ async def api_calculate_stats(request: StatsRequest) -> StatsResponse:
 
 # Custom exception handler for better error responses
 @app.exception_handler(Exception)
-async def general_exception_handler(request, exc):
+async def general_exception_handler(request: object, exc: Exception) -> JSONResponse:
     """Handle unexpected exceptions gracefully."""
     return JSONResponse(
         status_code=500,
@@ -309,6 +334,7 @@ if __name__ == "__main__":
     import uvicorn
 
     print("Starting Mathematical Operations API with FastAPI...")
+    print(f"Using {_implementation} implementation")
     print("Available endpoints:")
     print("  GET  /                    - API information")
     print("  GET  /health              - Health check")

@@ -16,7 +16,7 @@ Tests cover:
 
 import unittest
 
-from src.math_operations_oop import MathOperations
+from src.math_operations.oop import MathOperations
 
 
 class TestMathOperationsClass(unittest.TestCase):

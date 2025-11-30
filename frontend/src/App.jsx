@@ -10,6 +10,7 @@ import MathAPI from './services/api';
 function App() {
   const [apiStatus, setApiStatus] = useState('checking');
   const [apiInfo, setApiInfo] = useState(null);
+  const [implementation, setImplementation] = useState(null);
 
   useEffect(() => {
     checkApiStatus();
@@ -25,6 +26,14 @@ function App() {
       if (healthResponse.status === 'healthy') {
         setApiStatus('connected');
         setApiInfo(infoResponse);
+        
+        // Extract implementation type from service field
+        // Format: "math-operations-api (functional)" or "math-operations-api (object-oriented)"
+        const service = healthResponse.service || '';
+        const implMatch = service.match(/\(([^)]+)\)/);
+        if (implMatch) {
+          setImplementation(implMatch[1]);
+        }
       } else {
         setApiStatus('error');
       }
@@ -41,23 +50,49 @@ function App() {
           <h1>Mathematical Operations API</h1>
           <p>Interactive web interface for mathematical calculations</p>
           
-          <div style={{ marginTop: '1rem' }}>
-            Status: 
-            {apiStatus === 'checking' && (
-              <span style={{ marginLeft: '0.5rem', color: '#ffd700' }}>
-                <div className="loading" style={{ display: 'inline-block', marginRight: '0.5rem' }}></div>
-                Connecting to API...
-              </span>
-            )}
-            {apiStatus === 'connected' && (
-              <span style={{ marginLeft: '0.5rem', color: '#90ee90' }}>
-                ✓ Connected to API v{apiInfo?.version}
-              </span>
-            )}
-            {apiStatus === 'error' && (
-              <span style={{ marginLeft: '0.5rem', color: '#ff6b6b' }}>
-                ✗ API Connection Failed
-              </span>
+          <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', alignItems: 'center' }}>
+            <div>
+              Status: 
+              {apiStatus === 'checking' && (
+                <span style={{ marginLeft: '0.5rem', color: '#ffd700' }}>
+                  <div className="loading" style={{ display: 'inline-block', marginRight: '0.5rem' }}></div>
+                  Connecting to API...
+                </span>
+              )}
+              {apiStatus === 'connected' && (
+                <span style={{ marginLeft: '0.5rem', color: '#90ee90' }}>
+                  ✓ Connected to API v{apiInfo?.version}
+                </span>
+              )}
+              {apiStatus === 'error' && (
+                <span style={{ marginLeft: '0.5rem', color: '#ff6b6b' }}>
+                  ✗ API Connection Failed
+                </span>
+              )}
+            </div>
+            {apiStatus === 'connected' && implementation && (
+              <div style={{ 
+                marginTop: '0.5rem',
+                padding: '0.4rem 0.8rem',
+                borderRadius: '20px',
+                background: 'rgba(255, 255, 255, 0.2)',
+                backdropFilter: 'blur(10px)',
+                fontSize: '0.9rem',
+                fontWeight: '500',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}>
+                <span>Implementation:</span>
+                <span style={{ 
+                  textTransform: 'uppercase',
+                  fontWeight: '600',
+                  color: implementation === 'object-oriented' ? '#ffd700' : '#90ee90',
+                  letterSpacing: '0.5px'
+                }}>
+                  {implementation === 'object-oriented' ? '🏛️ OOP' : '⚡ Functional'}
+                </span>
+              </div>
             )}
           </div>
         </div>
