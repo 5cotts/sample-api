@@ -27,14 +27,16 @@ import sys
 # Import implementation loader and functions
 from impl_loader import (
     MATH_IMPL,
-    load_implementation,
-    square,
-    power,
+    calculate_stats,
     factorial,
     fibonacci,
+)
+from impl_loader import implementation as _implementation
+from impl_loader import (
     is_prime,
-    calculate_stats,
-    implementation as _implementation,
+    load_implementation,
+    power,
+    square,
 )
 
 
@@ -224,12 +226,12 @@ def main():
             _functions, implementation = load_implementation(impl)
             # Rebind global functions
             global square, power, factorial, fibonacci, is_prime, calculate_stats
-            square = _functions['square']
-            power = _functions['power']
-            factorial = _functions['factorial']
-            fibonacci = _functions['fibonacci']
-            is_prime = _functions['is_prime']
-            calculate_stats = _functions['calculate_stats']
+            square = _functions["square"]
+            power = _functions["power"]
+            factorial = _functions["factorial"]
+            fibonacci = _functions["fibonacci"]
+            is_prime = _functions["is_prime"]
+            calculate_stats = _functions["calculate_stats"]
         else:
             # Use already imported functions
             implementation = _implementation

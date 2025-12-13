@@ -27,10 +27,12 @@ from impl_loader import (
     calculate_stats,
     factorial,
     fibonacci,
+)
+from impl_loader import implementation as _implementation
+from impl_loader import (
     is_prime,
     power,
     square,
-    implementation as _implementation,
 )
 
 # Create FastAPI app with metadata
