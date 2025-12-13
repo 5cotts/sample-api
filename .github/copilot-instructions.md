@@ -14,6 +14,8 @@ This is an educational Python API project designed to demonstrate key API concep
 - Keep business logic pure and testable
 - Maintain clear separation between API routes and core functionality
 - Write comprehensive tests for all business logic
+  - **Unit Tests**: Follow patterns in `.cursor/commands/tests/unit-test-protocol.md`
+  - **Integration Tests**: Follow patterns in `.cursor/commands/tests/integration-test-protocol.md`
 - Provide clear examples for cURL testing
 - Document all endpoints and their usage
 

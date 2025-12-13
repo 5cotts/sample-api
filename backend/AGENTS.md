@@ -162,6 +162,10 @@ Create `cli.py` with command-line interface. See `docs/template/cli-patterns.md`
 - `tests/integration/test_api_integration.py` - API endpoint tests
 - `tests/integration/test_cli_integration.py` - CLI command tests
 
+**Testing Guidelines:**
+- **Unit Tests**: See [`.cursor/commands/tests/unit-test-protocol.md`](../../.cursor/commands/tests/unit-test-protocol.md) for comprehensive unit testing patterns, test structure, and best practices
+- **Integration Tests**: See [`.cursor/commands/tests/integration-test-protocol.md`](../../.cursor/commands/tests/integration-test-protocol.md) for API and CLI integration testing patterns
+
 **Run tests:**
 ```bash
 uv run python -m unittest discover -s tests -p "test_*.py" -v
