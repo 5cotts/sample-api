@@ -22,37 +22,20 @@ Usage:
 """
 
 import argparse
-import os
 import sys
 
-# Determine which implementation to use
-# Priority: CLI argument > environment variable > default (functional)
-MATH_IMPL = os.getenv("MATH_OPERATIONS_IMPL", "functional").lower()
-
-# Import functions based on implementation
-if MATH_IMPL == "oop":
-    from src.math_operations.oop import MathOperations
-
-    _calculator = MathOperations()
-    # Bind instance methods to function names for compatibility
-    square = _calculator.square
-    power = _calculator.power
-    factorial = _calculator.factorial
-    fibonacci = _calculator.fibonacci
-    is_prime = _calculator.is_prime
-    calculate_stats = _calculator.calculate_stats
-    _implementation = "object-oriented"
-else:
-    from src.math_operations.functional import (
-        calculate_stats,
-        factorial,
-        fibonacci,
-        is_prime,
-        power,
-        square,
-    )
-
-    _implementation = "functional"
+# Import implementation loader and functions
+from impl_loader import (
+    MATH_IMPL,
+    load_implementation,
+    square,
+    power,
+    factorial,
+    fibonacci,
+    is_prime,
+    calculate_stats,
+    implementation as _implementation,
+)
 
 
 def format_result(operation: str, result, **kwargs):
@@ -236,31 +219,17 @@ def main():
         # Determine implementation (CLI argument overrides env var)
         impl = args.impl.lower() if args.impl is not None else MATH_IMPL
 
-        # Override implementation if CLI argument provided
-        if impl == "oop" and MATH_IMPL != "oop":
-            from src.math_operations.oop import MathOperations
-
-            _calculator = MathOperations()
-            # Rebind functions to OOP methods
+        # Load implementation if different from initial load
+        if impl != MATH_IMPL:
+            _functions, implementation = load_implementation(impl)
+            # Rebind global functions
             global square, power, factorial, fibonacci, is_prime, calculate_stats
-            square = _calculator.square
-            power = _calculator.power
-            factorial = _calculator.factorial
-            fibonacci = _calculator.fibonacci
-            is_prime = _calculator.is_prime
-            calculate_stats = _calculator.calculate_stats
-            implementation = "object-oriented"
-        elif impl == "functional" and MATH_IMPL == "oop":
-            from src.math_operations.functional import (
-                calculate_stats,
-                factorial,
-                fibonacci,
-                is_prime,
-                power,
-                square,
-            )
-
-            implementation = "functional"
+            square = _functions['square']
+            power = _functions['power']
+            factorial = _functions['factorial']
+            fibonacci = _functions['fibonacci']
+            is_prime = _functions['is_prime']
+            calculate_stats = _functions['calculate_stats']
         else:
             # Use already imported functions
             implementation = _implementation

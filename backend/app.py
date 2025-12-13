@@ -17,41 +17,21 @@ FastAPI features demonstrated:
 import os
 from typing import List, Union
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
-# Determine which implementation to use based on environment variable
-# Set MATH_OPERATIONS_IMPL="oop" to use object-oriented implementation
-# Set MATH_OPERATIONS_IMPL="functional" or leave unset to use functional implementation
-MATH_IMPL = os.getenv("MATH_OPERATIONS_IMPL", "functional").lower()
-
-if MATH_IMPL == "oop":
-    # Use OOP implementation
-    from src.math_operations.oop import MathOperations
-
-    _calculator = MathOperations()
-    # Bind instance methods to function names for compatibility
-    square = _calculator.square
-    power = _calculator.power
-    factorial = _calculator.factorial
-    fibonacci = _calculator.fibonacci
-    is_prime = _calculator.is_prime
-    calculate_stats = _calculator.calculate_stats
-    _implementation = "object-oriented"
-else:
-    # Use functional implementation (default)
-    from src.math_operations.functional import (
-        calculate_stats,
-        factorial,
-        fibonacci,
-        is_prime,
-        power,
-        square,
-    )
-
-    _implementation = "functional"
+# Import implementation from shared loader
+from impl_loader import (
+    calculate_stats,
+    factorial,
+    fibonacci,
+    is_prime,
+    power,
+    square,
+    implementation as _implementation,
+)
 
 # Create FastAPI app with metadata
 app = FastAPI(
@@ -318,7 +298,7 @@ async def api_calculate_stats(request: StatsRequest) -> StatsResponse:
 
 # Custom exception handler for better error responses
 @app.exception_handler(Exception)
-async def general_exception_handler(request: object, exc: Exception) -> JSONResponse:
+async def general_exception_handler(request: Request, exc: Exception) -> JSONResponse:
     """Handle unexpected exceptions gracefully."""
     return JSONResponse(
         status_code=500,

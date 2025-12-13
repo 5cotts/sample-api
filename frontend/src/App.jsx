@@ -7,6 +7,35 @@ import PrimeChecker from './components/PrimeChecker';
 import StatisticsCalculator from './components/StatisticsCalculator';
 import MathAPI from './services/api';
 
+// Style constants - defined outside component to avoid recreation on every render
+const statusContainerStyle = {
+  marginTop: '1rem',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '0.5rem',
+  alignItems: 'center'
+};
+
+const implementationBadgeStyle = {
+  marginTop: '0.5rem',
+  padding: '0.4rem 0.8rem',
+  borderRadius: '20px',
+  background: 'rgba(255, 255, 255, 0.2)',
+  backdropFilter: 'blur(10px)',
+  fontSize: '0.9rem',
+  fontWeight: '500',
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: '0.5rem'
+};
+
+const getImplementationTextStyle = (impl) => ({
+  textTransform: 'uppercase',
+  fontWeight: '600',
+  color: impl === 'object-oriented' ? '#ffd700' : '#90ee90',
+  letterSpacing: '0.5px'
+});
+
 function App() {
   const [apiStatus, setApiStatus] = useState('checking');
   const [apiInfo, setApiInfo] = useState(null);
@@ -50,7 +79,7 @@ function App() {
           <h1>Mathematical Operations API</h1>
           <p>Interactive web interface for mathematical calculations</p>
           
-          <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', alignItems: 'center' }}>
+          <div style={statusContainerStyle}>
             <div>
               Status: 
               {apiStatus === 'checking' && (
@@ -71,25 +100,9 @@ function App() {
               )}
             </div>
             {apiStatus === 'connected' && implementation && (
-              <div style={{ 
-                marginTop: '0.5rem',
-                padding: '0.4rem 0.8rem',
-                borderRadius: '20px',
-                background: 'rgba(255, 255, 255, 0.2)',
-                backdropFilter: 'blur(10px)',
-                fontSize: '0.9rem',
-                fontWeight: '500',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem'
-              }}>
+              <div style={implementationBadgeStyle}>
                 <span>Implementation:</span>
-                <span style={{ 
-                  textTransform: 'uppercase',
-                  fontWeight: '600',
-                  color: implementation === 'object-oriented' ? '#ffd700' : '#90ee90',
-                  letterSpacing: '0.5px'
-                }}>
+                <span style={getImplementationTextStyle(implementation)}>
                   {implementation === 'object-oriented' ? '🏛️ OOP' : '⚡ Functional'}
                 </span>
               </div>
