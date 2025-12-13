@@ -92,7 +92,6 @@ class TestCLICommands(unittest.TestCase):
         # Both should produce the same result
 
 
-
 class TestSquareCommand(unittest.TestCase):
     """Test the square CLI command."""
 
