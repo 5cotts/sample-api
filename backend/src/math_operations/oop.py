@@ -2,7 +2,7 @@
 Object-Oriented Programming (OOP) Implementation of Mathematical Operations
 
 This module provides an OOP alternative to the functional programming approach
-in math_operations_functional.py. It demonstrates how the same business logic can be
+in math_operations.functional. It demonstrates how the same business logic can be
 organized using object-oriented principles.
 
 OOP Benefits Demonstrated:
@@ -33,7 +33,7 @@ class MathOperations:
     A class that encapsulates mathematical operations using object-oriented design.
 
     This class provides the same functionality as the functional implementation
-    in math_operations_functional.py, but organized as instance methods. While the current
+    in math_operations.functional, but organized as instance methods. While the current
     implementation is stateless, the OOP design allows for future enhancements
     such as:
     - Operation history tracking

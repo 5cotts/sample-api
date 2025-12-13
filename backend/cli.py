@@ -7,9 +7,14 @@ can be accessed directly from the command line. This shows the
 separation of concerns: the business logic is independent of the
 interface (API vs CLI).
 
+The CLI supports both functional and object-oriented implementations,
+controlled via the --impl argument or MATH_OPERATIONS_IMPL environment variable.
+
 Usage:
     python cli.py square 5
     python cli.py power 2 8
+    python cli.py --impl oop square 5
+    MATH_OPERATIONS_IMPL=oop python cli.py factorial 5
     python cli.py factorial 5
     python cli.py fibonacci 10
     python cli.py prime 17
@@ -19,11 +24,17 @@ Usage:
 import argparse
 import sys
 
-from src.math_operations_functional import (
+# Import implementation loader and functions
+from impl_loader import (
+    MATH_IMPL,
     calculate_stats,
     factorial,
     fibonacci,
+)
+from impl_loader import implementation as _implementation
+from impl_loader import (
     is_prime,
+    load_implementation,
     power,
     square,
 )
@@ -128,11 +139,24 @@ def create_parser():
         epilog="Examples:\n"
         "  python cli.py square 5\n"
         "  python cli.py power 2 8\n"
+        "  python cli.py --impl oop factorial 5\n"
         "  python cli.py factorial 5\n"
         "  python cli.py fibonacci 10\n"
         "  python cli.py prime 17\n"
-        "  python cli.py stats 1 2 3 4 5",
+        "  python cli.py stats 1 2 3 4 5\n\n"
+        "Implementation can be set via --impl argument or MATH_OPERATIONS_IMPL env var.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+
+    # Add implementation selection argument
+    parser.add_argument(
+        "--impl",
+        "--implementation",
+        dest="impl",
+        choices=["functional", "oop"],
+        default=None,
+        help="Implementation to use: 'functional' (default) or 'oop'. "
+        "Can also be set via MATH_OPERATIONS_IMPL environment variable.",
     )
 
     subparsers = parser.add_subparsers(dest="command", help="Available operations")
@@ -184,10 +208,6 @@ def create_parser():
 
 def main():
     """Main CLI entry point."""
-    print("Mathematical Operations CLI")
-    print("Demonstrating direct access to business logic functions")
-    print("(The same functions used by the REST API)")
-
     parser = create_parser()
 
     # If no arguments provided, show help
@@ -197,6 +217,31 @@ def main():
 
     try:
         args = parser.parse_args()
+
+        # Determine implementation (CLI argument overrides env var)
+        impl = args.impl.lower() if args.impl is not None else MATH_IMPL
+
+        # Load implementation if different from initial load
+        if impl != MATH_IMPL:
+            _functions, implementation = load_implementation(impl)
+            # Rebind global functions
+            global square, power, factorial, fibonacci, is_prime, calculate_stats
+            square = _functions["square"]
+            power = _functions["power"]
+            factorial = _functions["factorial"]
+            fibonacci = _functions["fibonacci"]
+            is_prime = _functions["is_prime"]
+            calculate_stats = _functions["calculate_stats"]
+        else:
+            # Use already imported functions
+            implementation = _implementation
+
+        # Display implementation being used
+        print("Mathematical Operations CLI")
+        print(f"Using {implementation} implementation")
+        print("Demonstrating direct access to business logic functions")
+        print("(The same functions used by the REST API)\n")
+
         args.func(args)
     except KeyboardInterrupt:
         print("\nOperation cancelled by user.")

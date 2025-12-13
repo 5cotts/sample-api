@@ -17,15 +17,19 @@ FastAPI features demonstrated:
 import os
 from typing import List, Union
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
-from src.math_operations_functional import (
+# Import implementation from shared loader
+from impl_loader import (
     calculate_stats,
     factorial,
     fibonacci,
+)
+from impl_loader import implementation as _implementation
+from impl_loader import (
     is_prime,
     power,
     square,
@@ -190,7 +194,10 @@ async def health_check() -> HealthResponse:
     """
     Health check endpoint to verify API is running.
     """
-    return HealthResponse(status="healthy", service="math-operations-api")
+    return HealthResponse(
+        status="healthy",
+        service=f"math-operations-api ({_implementation})",
+    )
 
 
 @app.get("/square/{number}", response_model=SquareResponse)
@@ -293,7 +300,7 @@ async def api_calculate_stats(request: StatsRequest) -> StatsResponse:
 
 # Custom exception handler for better error responses
 @app.exception_handler(Exception)
-async def general_exception_handler(request, exc):
+async def general_exception_handler(request: Request, exc: Exception) -> JSONResponse:
     """Handle unexpected exceptions gracefully."""
     return JSONResponse(
         status_code=500,
@@ -309,6 +316,7 @@ if __name__ == "__main__":
     import uvicorn
 
     print("Starting Mathematical Operations API with FastAPI...")
+    print(f"Using {_implementation} implementation")
     print("Available endpoints:")
     print("  GET  /                    - API information")
     print("  GET  /health              - Health check")

@@ -44,7 +44,15 @@ class TestAPIRootEndpoints(unittest.TestCase):
 
         data = response.json()
         self.assertEqual(data["status"], "healthy")
-        self.assertEqual(data["service"], "math-operations-api")
+        # Service name now includes implementation type
+        self.assertIn("math-operations-api", data["service"])
+        self.assertIn(
+            data["service"],
+            [
+                "math-operations-api (functional)",
+                "math-operations-api (object-oriented)",
+            ],
+        )
 
 
 class TestGETEndpoints(unittest.TestCase):

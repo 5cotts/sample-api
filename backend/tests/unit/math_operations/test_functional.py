@@ -7,7 +7,7 @@ the API layer, we can write focused, fast unit tests that don't require
 spinning up a web server or making HTTP requests.
 
 This is the test suite for the functional programming implementation.
-For tests of the object-oriented implementation, see test_math_operations_oop.py.
+For tests of the object-oriented implementation, see test_oop.py.
 
 Tests cover:
 - Happy path scenarios
@@ -18,7 +18,7 @@ Tests cover:
 
 import unittest
 
-from src.math_operations_functional import (
+from src.math_operations.functional import (
     calculate_stats,
     factorial,
     fibonacci,

@@ -6,7 +6,7 @@ independently of any API implementation. This demonstrates the important
 principle of separating business logic from API infrastructure.
 
 This is the functional programming implementation. For an object-oriented
-alternative, see math_operations_oop.py.
+alternative, see math_operations.oop.
 
 These functions are designed to be:
 - Pure functions with no side effects

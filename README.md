@@ -10,9 +10,10 @@ This is a complete full-stack application consisting of:
 - **Frontend Web App**: React-based interactive web interface  
 - **Command Line Interface**: Direct access to business logic via CLI
 - **Docker Deployment**: Full containerization with Docker Compose
-- **Comprehensive Testing**: 88+ tests across unit, integration, and API layers
+- **Comprehensive Testing**: 94+ tests across unit, integration, and API layers
+- **Dual Implementation**: Both functional and object-oriented programming paradigms
 
-The project demonstrates **separation of concerns** by implementing the same mathematical business logic accessible through multiple interfaces: REST API, web interface, and command-line tools.
+The project demonstrates **separation of concerns** by implementing the same mathematical business logic accessible through multiple interfaces: REST API, web interface, and command-line tools. It also showcases both **functional** and **object-oriented** programming approaches, with runtime switching between implementations.
 
 ## 🏗️ Architecture
 
@@ -54,7 +55,13 @@ docker-compose up --build
 ```bash
 cd backend
 uv sync --dev
+
+# Use functional implementation (default)
 uv run python app.py
+
+# Or use OOP implementation
+MATH_OPERATIONS_IMPL=oop uv run python app.py
+
 # API available at http://localhost:8000
 ```
 
@@ -72,12 +79,21 @@ npm run dev
 sample-api/
 ├── backend/                          # FastAPI Backend
 │   ├── src/
-│   │   └── math_operations.py        # 🧠 Core Business Logic
+│   │   ├── math_operations/          # 🧮 Math Operations Package
+│   │   │   ├── __init__.py          # Package exports
+│   │   │   ├── functional.py        # ⚡ Functional Implementation
+│   │   │   └── oop.py              # 🏛️ OOP Implementation
+│   │   └── data_parsing.py          # 📊 Data Processing Logic
 │   ├── tests/
 │   │   ├── unit/                     # ✅ Business Logic Tests
+│   │   │   ├── math_operations/     # Tests matching source structure
+│   │   │   │   ├── test_functional.py
+│   │   │   │   └── test_oop.py
+│   │   │   └── test_data_parsing.py
 │   │   └── integration/              # 🔗 API & CLI Tests  
 │   ├── app.py                        # 🚀 FastAPI Application
 │   ├── cli.py                        # 💻 Command Line Interface
+│   ├── IMPLEMENTATION_SWITCH.md      # 📖 Implementation Switching Guide
 │   ├── pyproject.toml                # 📦 Python Dependencies
 │   └── Dockerfile                    # 🐳 Backend Container
 ├── frontend/                         # React Frontend
@@ -110,11 +126,22 @@ Each operation is available through:
 2. **REST API**: HTTP endpoints at `http://localhost:8000`
 3. **Command Line**: Direct CLI access via `python cli.py`
 
+### Implementation Paradigms
+The project includes two implementations of the same business logic:
+- **Functional Implementation**: Pure functions with no side effects (default)
+- **Object-Oriented Implementation**: Class-based design with instance methods
+
+Switch between implementations using the `MATH_OPERATIONS_IMPL` environment variable:
+- `MATH_OPERATIONS_IMPL=functional` (default) - Uses functional programming approach
+- `MATH_OPERATIONS_IMPL=oop` - Uses object-oriented programming approach
+
+See [backend/IMPLEMENTATION_SWITCH.md](backend/IMPLEMENTATION_SWITCH.md) for detailed usage instructions.
+
 ## 🌐 API Documentation
 
 - **Interactive Docs (Swagger UI)**: http://localhost:8000/docs
 - **Alternative Docs (ReDoc)**: http://localhost:8000/redoc
-- **Health Check**: http://localhost:8000/health
+- **Health Check**: http://localhost:8000/health (shows active implementation: functional or object-oriented)
 
 ### Example API Usage
 
@@ -157,14 +184,21 @@ The project includes comprehensive testing across multiple layers:
 ```bash
 cd backend
 
-# Run all 88 tests
+# Run all 94+ tests
 uv run python -m unittest discover -s tests -p "test_*.py" -v
 
 # Run specific test categories
-uv run python -m unittest tests.unit.test_math_operations -v           # Unit tests (30)
-uv run python -m unittest tests.integration.test_api_integration -v    # API tests (31)  
-uv run python -m unittest tests.integration.test_cli_integration -v    # CLI tests (27)
+uv run python -m unittest tests.unit.math_operations.test_functional -v  # Functional unit tests (30)
+uv run python -m unittest tests.unit.math_operations.test_oop -v        # OOP unit tests (34)
+uv run python -m unittest tests.integration.test_api_integration -v      # API tests (31)  
+uv run python -m unittest tests.integration.test_cli_integration -v      # CLI tests (27)
 ```
+
+### Test Coverage
+- **Functional Implementation Tests**: 30 unit tests covering all mathematical operations
+- **OOP Implementation Tests**: 34 unit tests including class instantiation and method testing
+- **Integration Tests**: 58 tests covering API endpoints and CLI commands
+- **Total**: 94+ tests ensuring both implementations work correctly
 
 ## 🔍 Code Quality & Linting
 
@@ -311,6 +345,12 @@ This project demonstrates key software engineering concepts:
 - Demonstrates how interfaces are separate from core functionality
 - Shows flexibility and reusability of well-designed business logic
 
+### 2a. **Programming Paradigm Comparison**
+- **Functional Programming**: Pure functions with no side effects, easily testable
+- **Object-Oriented Programming**: Class-based design with encapsulation and extensibility
+- **Runtime Switching**: Environment variable allows switching between implementations
+- Both implementations provide identical functionality, demonstrating paradigm equivalence
+
 ### 3. **Modern Full-Stack Architecture**
 - RESTful API design with proper HTTP methods and status codes
 - Interactive frontend with real-time API communication
@@ -318,10 +358,10 @@ This project demonstrates key software engineering concepts:
 - Comprehensive error handling and user feedback
 
 ### 4. **Testing Best Practices**
-- **Unit Tests**: Fast, focused tests of business logic functions
+- **Unit Tests**: Fast, focused tests of business logic functions (both functional and OOP)
 - **Integration Tests**: HTTP endpoint testing with FastAPI TestClient
 - **CLI Integration Tests**: Command-line interface testing via subprocess
-- 88+ tests providing comprehensive coverage across all application layers
+- 94+ tests providing comprehensive coverage across all application layers and both implementations
 
 ### 5. **Production-Ready Patterns**
 - Docker containerization for consistent deployment
@@ -436,6 +476,7 @@ The AGENTS.md system enables more accurate and context-aware AI assistance throu
 
 - **Using as a Template**: See [AGENTS.md](AGENTS.md) for template instructions and customization guide
 - **Backend Template Guide**: See [backend/AGENTS.md](backend/AGENTS.md) for complete backend template
+- **Implementation Switching**: See [backend/IMPLEMENTATION_SWITCH.md](backend/IMPLEMENTATION_SWITCH.md) for details on switching between functional and OOP implementations
 - **Frontend Patterns**: See [frontend/AGENTS.md](frontend/AGENTS.md) for React application patterns
 - **Component Guidelines**: See [frontend/src/components/AGENTS.md](frontend/src/components/AGENTS.md) for component patterns
 - **Template Documentation**: See [docs/template/](docs/template/) for detailed template files
