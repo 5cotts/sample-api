@@ -12,15 +12,21 @@ FastAPI features demonstrated:
 - Type hints for better code clarity
 - Automatic JSON serialization
 - Built-in error handling
+
+MCP Server:
+- Auto-converted from FastAPI endpoints using FastMCP
+- Available at /mcp endpoint for AI assistant integration
 """
 
+import json
 import os
-from typing import List, Union
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastmcp import FastMCP
 from pydantic import BaseModel, Field
+from starlette.middleware.base import BaseHTTPMiddleware
 
 # Import implementation from shared loader
 from impl_loader import (
@@ -62,19 +68,81 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# MCP Parameter Cleaning Middleware
+# Converts string parameters to numbers for MCP tool calls
+# This handles cases where MCP clients (like Cursor) pass string parameters
+
+
+class MCPParameterCleaningMiddleware(BaseHTTPMiddleware):
+    """Middleware to clean MCP tool call parameters by converting strings to numbers."""
+
+    async def dispatch(self, request: Request, call_next):
+        # Only process POST requests to MCP endpoints
+        if request.method == "POST" and request.url.path.startswith("/mcp"):
+            try:
+                body = await request.body()
+                if body:
+                    data = json.loads(body)
+
+                    # Check if this is a tools/call request
+                    if data.get("method") == "tools/call" and "params" in data:
+                        params = data["params"]
+                        arguments = params.get("arguments", {})
+
+                        # Clean numeric parameters (convert strings to numbers)
+                        cleaned_args = {}
+                        for param_name, param_value in arguments.items():
+                            if isinstance(param_value, str):
+                                # Try to convert to number
+                                try:
+                                    # Try int first, then float
+                                    if "." in param_value or "e" in param_value.lower():
+                                        cleaned_args[param_name] = float(param_value)
+                                    else:
+                                        cleaned_args[param_name] = int(param_value)
+                                except (ValueError, TypeError):
+                                    # If conversion fails, keep original value
+                                    cleaned_args[param_name] = param_value
+                            else:
+                                cleaned_args[param_name] = param_value
+
+                        # Update the request data
+                        data["params"]["arguments"] = cleaned_args
+
+                        # Create a new request with cleaned body
+                        async def receive():
+                            return {
+                                "type": "http.request",
+                                "body": json.dumps(data).encode(),
+                            }
+
+                        # Replace the request's receive function
+                        request._receive = receive
+
+            except (json.JSONDecodeError, KeyError, AttributeError):
+                # If parsing fails, continue with original request
+                pass
+
+        response = await call_next(request)
+        return response
+
+
+# Add MCP parameter cleaning middleware
+app.add_middleware(MCPParameterCleaningMiddleware)
+
 
 # Pydantic models for POST request validation
 class PowerRequest(BaseModel):
     """Request model for power calculation."""
 
-    base: Union[int, float] = Field(..., description="The base number")
-    exponent: Union[int, float] = Field(..., description="The exponent")
+    base: int = Field(..., description="The base number")
+    exponent: int = Field(..., description="The exponent")
 
 
 class StatsRequest(BaseModel):
     """Request model for statistics calculation."""
 
-    numbers: List[Union[int, float]] = Field(
+    numbers: list[int] = Field(
         ..., description="List of numbers to calculate statistics for", min_length=1
     )
 
@@ -106,16 +174,16 @@ class MathOperationResponse(BaseModel):
 class SquareResponse(MathOperationResponse):
     """Response model for square operation."""
 
-    input: Union[int, float] = Field(..., description="The input number")
-    result: Union[int, float] = Field(..., description="The squared result")
+    input: int = Field(..., description="The input number")
+    result: int = Field(..., description="The squared result")
 
 
 class PowerResponse(MathOperationResponse):
     """Response model for power operation."""
 
-    base: Union[int, float] = Field(..., description="The base number")
-    exponent: Union[int, float] = Field(..., description="The exponent")
-    result: Union[int, float] = Field(..., description="The power result")
+    base: int = Field(..., description="The base number")
+    exponent: int = Field(..., description="The exponent")
+    result: int = Field(..., description="The power result")
 
 
 class FactorialResponse(MathOperationResponse):
@@ -129,7 +197,7 @@ class FibonacciResponse(MathOperationResponse):
     """Response model for fibonacci operation."""
 
     count: int = Field(..., description="Number of Fibonacci numbers requested")
-    sequence: List[int] = Field(..., description="The Fibonacci sequence")
+    sequence: list[int] = Field(..., description="The Fibonacci sequence")
 
 
 class PrimeResponse(MathOperationResponse):
@@ -144,16 +212,16 @@ class StatisticsData(BaseModel):
 
     count: int = Field(..., description="Number of values")
     mean: float = Field(..., description="Arithmetic mean")
-    median: Union[int, float] = Field(..., description="Median value")
-    min: Union[int, float] = Field(..., description="Minimum value")
-    max: Union[int, float] = Field(..., description="Maximum value")
-    sum: Union[int, float] = Field(..., description="Sum of all values")
+    median: int = Field(..., description="Median value")
+    min: int = Field(..., description="Minimum value")
+    max: int = Field(..., description="Maximum value")
+    sum: int = Field(..., description="Sum of all values")
 
 
 class StatsResponse(MathOperationResponse):
     """Response model for statistics operation."""
 
-    input_numbers: List[Union[int, float]] = Field(..., description="The input numbers")
+    input_numbers: list[int] = Field(..., description="The input numbers")
     statistics: StatisticsData = Field(..., description="Calculated statistics")
 
 
@@ -201,11 +269,11 @@ async def health_check() -> HealthResponse:
 
 
 @app.get("/square/{number}", response_model=SquareResponse)
-async def api_square(number: Union[int, float]) -> SquareResponse:
+async def api_square(number: int) -> SquareResponse:
     """
     Calculate the square of a number.
 
-    - **number**: The number to square (int or float)
+    - **number**: The number to square (integer)
     """
     try:
         result = square(number)
@@ -266,11 +334,27 @@ async def api_power(request: PowerRequest) -> PowerResponse:
     - **exponent**: The exponent
     """
     try:
-        result = power(request.base, request.exponent)
+        # Data cleaning: Convert strings to numbers if needed (for MCP compatibility)
+        base = request.base
+        exponent = request.exponent
+
+        if isinstance(base, str):
+            try:
+                base = int(base)
+            except ValueError:
+                base = float(base)
+
+        if isinstance(exponent, str):
+            try:
+                exponent = int(exponent)
+            except ValueError:
+                exponent = float(exponent)
+
+        result = power(base, exponent)
         return PowerResponse(
             operation="power",
-            base=request.base,
-            exponent=request.exponent,
+            base=base,
+            exponent=exponent,
             result=result,
         )
     except (ValueError, TypeError) as e:
@@ -312,12 +396,27 @@ async def general_exception_handler(request: Request, exc: Exception) -> JSONRes
     )
 
 
+# MCP Server: Auto-convert FastAPI endpoints to MCP tools
+# This enables AI assistants to use the API via Model Context Protocol
+# One-line conversion: FastMCP automatically converts all endpoints to MCP tools
+mcp = FastMCP.from_fastapi(app=app, name="Mathematical Operations MCP")
+
+
+# Mount MCP server into FastAPI app at /mcp endpoint
+# This allows both REST API and MCP to be served from the same server
+# The MCPParameterCleaningMiddleware (added above) will handle parameter conversion
+# Note: For production, consider passing mcp_app.lifespan to FastAPI app creation
+# if you need proper session management. Current setup works for basic use cases.
+mcp_app = mcp.http_app(path="/mcp")
+app.mount("/mcp", mcp_app)
+
+
 if __name__ == "__main__":
     import uvicorn
 
     print("Starting Mathematical Operations API with FastAPI...")
     print(f"Using {_implementation} implementation")
-    print("Available endpoints:")
+    print("\nAvailable endpoints:")
     print("  GET  /                    - API information")
     print("  GET  /health              - Health check")
     print("  GET  /docs               - Interactive API documentation (Swagger UI)")
@@ -328,8 +427,11 @@ if __name__ == "__main__":
     print("  GET  /prime/{number}      - Check if prime")
     print("  POST /power               - Calculate power (JSON body)")
     print("  POST /stats               - Calculate statistics (JSON body)")
+    print("\nMCP Server:")
+    print("  POST /mcp                - MCP endpoint for AI assistants")
     print("\nAPI running on http://localhost:8000")
     print("Interactive docs available at http://localhost:8000/docs")
+    print("MCP server available at http://localhost:8000/mcp")
     print("Press Ctrl+C to stop the server")
 
     uvicorn.run(

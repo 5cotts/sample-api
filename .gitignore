@@ -49,6 +49,9 @@ coverage.xml
 *.swo
 *~
 
+# Cursor IDE
+.cursor/mcp.json
+
 # OS specific
 .DS_Store
 .DS_Store?

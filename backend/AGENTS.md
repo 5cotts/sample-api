@@ -14,19 +14,25 @@ backend/
 ├── pyproject.toml       # Dependencies & tool configuration
 ├── src/
 │   ├── __init__.py
-│   └── math_operations/      # Math operations package
+│   ├── math_operations/      # Math operations package
+│   │   ├── __init__.py       # Package exports
+│   │   ├── functional.py     # Functional implementation
+│   │   └── oop.py           # Object-oriented implementation
+│   └── mcp/                  # MCP client package
 │       ├── __init__.py       # Package exports
-│       ├── functional.py     # Functional implementation
-│       └── oop.py           # Object-oriented implementation
+│       └── sse_client.py    # MCP SSE client
 ├── tests/
 │   ├── unit/                 # Unit tests for business logic
 │   │   ├── math_operations/ # Tests matching source structure
 │   │   │   ├── test_functional.py
 │   │   │   └── test_oop.py
+│   │   ├── mcp/             # MCP client tests
+│   │   │   └── test_sse_client.py
 │   │   └── test_data_parsing.py
-│   └── integration/         # Integration tests for API/CLI
-├── app.py                    # FastAPI REST API
-└── cli.py                    # Command-line interface
+│   └── integration/         # Integration tests for API/CLI/MCP
+├── app.py                    # FastAPI REST API (includes MCP server)
+├── cli.py                    # Command-line interface
+└── mcp_sse_client.py         # MCP SSE client CLI tool
 ```
 
 ## 1. Configuration: pyproject.toml
@@ -132,6 +138,7 @@ Create `app.py` with FastAPI application. See `docs/template/api-patterns.md` fo
 - `GET /prime/{number}` - Prime check
 - `POST /power` - Power calculation
 - `POST /stats` - Statistics calculation
+- `POST /mcp` - MCP endpoint (via FastMCP) for AI assistant integration
 
 ## 4. CLI Interface: cli.py
 
@@ -159,8 +166,10 @@ Create `cli.py` with command-line interface. See `docs/template/cli-patterns.md`
 **Structure:**
 - `tests/unit/math_operations/test_functional.py` - Unit tests for functional implementation
 - `tests/unit/math_operations/test_oop.py` - Unit tests for OOP implementation
+- `tests/unit/mcp/test_sse_client.py` - Unit tests for MCP SSE client
 - `tests/integration/test_api_integration.py` - API endpoint tests
 - `tests/integration/test_cli_integration.py` - CLI command tests
+- `tests/integration/test_mcp_integration.py` - MCP integration tests (placeholder)
 
 **Testing Guidelines:**
 - **Unit Tests**: See [`.cursor/commands/tests/unit-test-protocol.md`](../../.cursor/commands/tests/unit-test-protocol.md) for comprehensive unit testing patterns, test structure, and best practices
@@ -240,13 +249,38 @@ uv run black . && uv run isort . && uv run mypy src/ && uv run flake8 .
 - `is_prime()` → `meets_criteria()`
 - `calculate_stats()` → `validation_report()`
 
+## 7. MCP (Model Context Protocol) Client
+
+The project includes an MCP SSE client for interacting with MCP servers:
+
+**Components:**
+- `src/mcp/sse_client.py` - `MCPSSEClient` class for sending MCP JSON-RPC requests via SSE
+- `mcp_sse_client.py` - CLI tool for interacting with MCP servers
+- `app.py` - Includes FastMCP integration to expose API endpoints as MCP tools
+
+**MCPSSEClient Features:**
+- `send_request()` - Send MCP JSON-RPC requests and return raw SSE responses
+- `parse_sse_response()` - Parse SSE stream responses into structured data
+- Automatic request ID management
+- Support for `tools/list` and `tools/call` methods
+
+**Usage:**
+```python
+from src.mcp.sse_client import MCPSSEClient
+
+client = MCPSSEClient("http://localhost:8000/mcp/")
+response = client.send_request("tools/call", {"name": "square", "arguments": {"number": 5}})
+parsed = client.parse_sse_response(response)
+```
+
 ## Key Reminders
 
 1. Keep business logic in `src/`
 2. Keep API thin (calls business logic)
 3. Keep CLI calling business logic
-4. Maintain test patterns
-5. Update documentation
+4. MCP client provides another interface to the same business logic
+5. Maintain test patterns
+6. Update documentation
 
 ## Validation
 

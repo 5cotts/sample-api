@@ -83,16 +83,22 @@ sample-api/
 │   │   │   ├── __init__.py          # Package exports
 │   │   │   ├── functional.py        # ⚡ Functional Implementation
 │   │   │   └── oop.py              # 🏛️ OOP Implementation
+│   │   ├── mcp/                      # 🤖 MCP Client Package
+│   │   │   ├── __init__.py          # Package exports
+│   │   │   └── sse_client.py       # MCP SSE Client
 │   │   └── data_parsing.py          # 📊 Data Processing Logic
 │   ├── tests/
 │   │   ├── unit/                     # ✅ Business Logic Tests
 │   │   │   ├── math_operations/     # Tests matching source structure
 │   │   │   │   ├── test_functional.py
 │   │   │   │   └── test_oop.py
+│   │   │   ├── mcp/                 # MCP Client Tests
+│   │   │   │   └── test_sse_client.py
 │   │   │   └── test_data_parsing.py
 │   │   └── integration/              # 🔗 API & CLI Tests  
-│   ├── app.py                        # 🚀 FastAPI Application
+│   ├── app.py                        # 🚀 FastAPI Application (includes MCP server)
 │   ├── cli.py                        # 💻 Command Line Interface
+│   ├── mcp_sse_client.py            # 🤖 MCP SSE Client CLI Tool
 │   ├── IMPLEMENTATION_SWITCH.md      # 📖 Implementation Switching Guide
 │   ├── pyproject.toml                # 📦 Python Dependencies
 │   └── Dockerfile                    # 🐳 Backend Container
@@ -125,6 +131,7 @@ Each operation is available through:
 1. **Web Interface**: Interactive React components at `http://localhost:3000`
 2. **REST API**: HTTP endpoints at `http://localhost:8000`
 3. **Command Line**: Direct CLI access via `python cli.py`
+4. **MCP (Model Context Protocol)**: AI assistant integration via MCP endpoint at `http://localhost:8000/mcp`
 
 ### Implementation Paradigms
 The project includes two implementations of the same business logic:
@@ -177,6 +184,27 @@ uv run python cli.py prime 17
 uv run python cli.py stats 1 2 3 4 5
 ```
 
+## 🤖 MCP (Model Context Protocol) Client
+
+The project includes an MCP SSE client for interacting with the MCP server:
+
+```bash
+cd backend
+
+# List available MCP tools
+uv run python mcp_sse_client.py tools/list
+
+# Call a tool via MCP (e.g., square operation)
+uv run python mcp_sse_client.py tools/call --params '{"name": "square", "arguments": {"number": 5}}'
+```
+
+The MCP client (`src/mcp/sse_client.py`) provides:
+- `MCPSSEClient`: Client class for sending MCP JSON-RPC requests via SSE
+- `send_request()`: Send requests and get raw SSE responses
+- `parse_sse_response()`: Parse SSE stream responses into structured data
+
+The MCP server is automatically available at `/mcp` endpoint when the FastAPI server is running, enabling AI assistants to interact with the API via the Model Context Protocol.
+
 ## 🧪 Testing
 
 The project includes comprehensive testing across multiple layers:
@@ -190,6 +218,7 @@ uv run python -m unittest discover -s tests -p "test_*.py" -v
 # Run specific test categories
 uv run python -m unittest tests.unit.math_operations.test_functional -v  # Functional unit tests (30)
 uv run python -m unittest tests.unit.math_operations.test_oop -v        # OOP unit tests (34)
+uv run python -m unittest tests.unit.mcp.test_sse_client -v            # MCP client tests (22)
 uv run python -m unittest tests.integration.test_api_integration -v      # API tests (31)  
 uv run python -m unittest tests.integration.test_cli_integration -v      # CLI tests (27)
 ```
@@ -197,8 +226,9 @@ uv run python -m unittest tests.integration.test_cli_integration -v      # CLI t
 ### Test Coverage
 - **Functional Implementation Tests**: 30 unit tests covering all mathematical operations
 - **OOP Implementation Tests**: 34 unit tests including class instantiation and method testing
-- **Integration Tests**: 58 tests covering API endpoints and CLI commands
-- **Total**: 94+ tests ensuring both implementations work correctly
+- **MCP Client Tests**: 22 unit tests covering MCPSSEClient functionality
+- **Integration Tests**: 58+ tests covering API endpoints and CLI commands
+- **Total**: 116+ tests ensuring all components work correctly
 
 ## 🔍 Code Quality & Linting
 
